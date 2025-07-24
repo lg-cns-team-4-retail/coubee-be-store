@@ -25,6 +25,7 @@ public class StoreController {
         2. 매장 목록 조회 (personalizer 매장 추천 storeIds [] )
         3. 매장 좋아요 등록
      */
+    
     @GetMapping("/near")
     public ApiResponseDto<?> getNearStoreList(@RequestParam double lat, @RequestParam double lng) {
         List<Store> storeList = storeService.getNearStoreList(lat, lng);
