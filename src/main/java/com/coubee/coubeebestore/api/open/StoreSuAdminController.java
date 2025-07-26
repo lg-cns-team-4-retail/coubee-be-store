@@ -14,6 +14,9 @@ import com.coubee.coubeebestore.service.StoreService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @Slf4j
@@ -27,11 +30,22 @@ public class StoreSuAdminController {
     /* todo :
         1. 매장 등록 승인v
         2. 매장 삭제
+        3. 매장 등록 대기 목록 조회(?)
      */
 
+    // 매장 등록 승인
     @PostMapping("/approve")
     public ApiResponseDto<String> storeApprove(@RequestBody StoreDto storeDto) {
         storeService.storeApprove(storeDto);
         return ApiResponseDto.defaultOk();
     } 
+
+    // 매장 등록 대기 목록 조회
+    @PostMapping("/status")
+    public String getMethodName(@RequestParam String param) {
+        return new String();
+    }
+    
+
+    
 }

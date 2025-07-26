@@ -1,10 +1,12 @@
 package com.coubee.coubeebestore.service;
 
 import com.coubee.coubeebestore.common.exception.NotFound;
+import com.coubee.coubeebestore.domain.InterestStore;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
+import com.coubee.coubeebestore.domain.repository.InterestStoreRepository;
 import com.coubee.coubeebestore.domain.repository.StoreRepository;
 import com.coubee.coubeebestore.util.FileUploader;
 
@@ -28,6 +30,7 @@ public class StoreService {
 
     private final FileUploader fileUploader;
     private final StoreRepository storeRepository;
+    private final InterestStoreRepository interestStoreRepository;
     private final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
     @Transactional
@@ -76,5 +79,21 @@ public class StoreService {
         return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude);
     }
 
+    public void registerInterestStore(Long userId, StoreDto storeDto) {
+
+        Store store = storeRepository.findById(storeDto.getStoreId())
+                      .orElseThrow(() -> new IllegalArgumentException("매장 없음"));
+
+        boolean exists = interestStoreRepository.existsByUserIdAndStore(userId, store);
+        if (exists) {
+            throw new IllegalStateException("이미 관심 매장으로 등록됨");
+        }
+
+        InterestStore interest = InterestStore.builder()
+            .userId(userId)
+            .store(store)
+            .build();
+        interestStoreRepository.save(interest);
+    }
 
 }
