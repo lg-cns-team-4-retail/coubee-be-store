@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
@@ -34,6 +35,7 @@ public class Store extends BaseTimeEntity{
     private double longitude;
 
     @Column(columnDefinition = "geometry(Point,4326)")
+    @JsonIgnore
     private Point location;
 
     @Column(length = 50)

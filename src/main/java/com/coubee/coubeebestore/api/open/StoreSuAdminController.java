@@ -1,22 +1,11 @@
 package com.coubee.coubeebestore.api.open;
 
+import com.coubee.coubeebestore.common.dto.ApiResponseDto;
+import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.coubee.coubeebestore.common.dto.ApiResponseDto;
-import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
-import com.coubee.coubeebestore.domain.dto.StoreDto;
-import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
-import com.coubee.coubeebestore.service.StoreService;
-
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -34,11 +23,16 @@ public class StoreSuAdminController {
      */
 
     // 매장 등록 승인
-    @PostMapping("/approve")
-    public ApiResponseDto<String> storeApprove(@RequestBody StoreDto storeDto) {
-        storeService.storeApprove(storeDto);
+    @PostMapping("/approve/{storeId}")
+    public ApiResponseDto<String> storeApprove(@PathVariable Long storeId) {
+        storeService.storeApprove(storeId);
         return ApiResponseDto.defaultOk();
-    } 
+    }
+    @PostMapping("/reject/{storeId}")
+    public ApiResponseDto<String> storeReject(@PathVariable Long storeId,@RequestBody String rejectReason) {
+        storeService.storeReject(storeId,rejectReason);
+        return ApiResponseDto.defaultOk();
+    }
 
     // 매장 등록 대기 목록 조회
     @PostMapping("/status")

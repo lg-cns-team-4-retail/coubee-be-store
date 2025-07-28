@@ -1,37 +1,31 @@
 package com.coubee.coubeebestore.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "interest_stores", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "store_id"})
 })
+@NoArgsConstructor
 public class InterestStore {
     
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Store store;
+    @Getter
+    private Long storeId;
 
     @Builder
     public InterestStore (
-        Long id,
         Long userId,
-        Store store
+        Long storeId
     ) {
-        this.id = id;
         this.userId = userId;
-        this.store = store;
+        this.storeId = storeId;
     }
 }

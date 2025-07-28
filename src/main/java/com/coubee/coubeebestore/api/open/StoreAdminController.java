@@ -49,4 +49,9 @@ public class StoreAdminController {
         String imgUrl = storeService.storeImgProfile(file);
         return ApiResponseDto.createOk(imgUrl);
     }
+    @PostMapping("/img/certificate")
+    public ApiResponseDto<String> storeImgCertificate(@RequestParam MultipartFile file) {
+        String imgUrl = storeService.storeImgCertificate(file);
+        return ApiResponseDto.createOk(imgUrl);
+    }
 }
