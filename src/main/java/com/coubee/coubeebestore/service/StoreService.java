@@ -4,6 +4,7 @@ import com.coubee.coubeebestore.common.exception.NotFound;
 import com.coubee.coubeebestore.domain.InterestStore;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
+import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
 import com.coubee.coubeebestore.domain.repository.InterestStoreRepository;
 import com.coubee.coubeebestore.domain.repository.StoreRepository;
@@ -102,5 +103,9 @@ public class StoreService {
         List<InterestStore> interestList = interestStoreRepository.findByUserId(userId);
         List<Long> storeIds = interestList.stream().map(InterestStore::getStoreId).toList();
         return storeRepository.findAllById(storeIds);
+    }
+
+    public List<Store> getStatusList(StoreStatus status) {
+        return storeRepository.findAllByStatus(status);
     }
 }

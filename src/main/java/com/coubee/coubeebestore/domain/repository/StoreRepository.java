@@ -2,6 +2,8 @@ package com.coubee.coubeebestore.domain.repository;
 
 
 import com.coubee.coubeebestore.domain.Store;
+import com.coubee.coubeebestore.domain.StoreStatus;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,5 +30,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findNearbyStoresOrderByDistance(@Param("lat") double lat, @Param("lng") double lng);
 
     List<Store> findAllByStoreIdIn(List<Long> storeIds);
+
+    List<Store> findAllByStatus(StoreStatus status);
 
 }

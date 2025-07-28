@@ -1,9 +1,14 @@
 package com.coubee.coubeebestore.api.open;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
+import com.coubee.coubeebestore.domain.Store;
+import com.coubee.coubeebestore.domain.StoreStatus;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,15 +34,16 @@ public class StoreSuAdminController {
         return ApiResponseDto.defaultOk();
     }
     @PostMapping("/reject/{storeId}")
-    public ApiResponseDto<String> storeReject(@PathVariable Long storeId,@RequestBody String rejectReason) {
-        storeService.storeReject(storeId,rejectReason);
+    public ApiResponseDto<String> storeReject(@PathVariable Long storeId, @RequestBody String rejectReason) {
+        storeService.storeReject(storeId, rejectReason);
         return ApiResponseDto.defaultOk();
     }
 
     // 매장 등록 대기 목록 조회
-    @PostMapping("/status")
-    public String getMethodName(@RequestParam String param) {
-        return new String();
+    @GetMapping("/status")
+    public ApiResponseDto<List<Store>> getStatusList() {
+        List<Store> list = storeService.getStatusList(StoreStatus.PENDING);
+        return ApiResponseDto.readOk(list);
     }
     
 }
