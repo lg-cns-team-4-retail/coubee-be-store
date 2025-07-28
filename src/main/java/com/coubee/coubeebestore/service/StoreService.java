@@ -79,7 +79,7 @@ public class StoreService {
         return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude);
     }
 
-    public void registerInterestStore(Long userId, StoreDto storeDto) {
+    public void addInterestStore(Long userId, StoreDto storeDto) {
 
         Store store = storeRepository.findById(storeDto.getStoreId())
                       .orElseThrow(() -> new IllegalArgumentException("매장 없음"));

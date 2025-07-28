@@ -46,6 +46,4 @@ public class StoreSuAdminController {
         return new String();
     }
     
-
-    
 }
