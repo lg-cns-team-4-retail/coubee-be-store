@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
@@ -34,6 +35,7 @@ public class Store extends BaseTimeEntity{
     private double longitude;
 
     @Column(columnDefinition = "geometry(Point,4326)")
+    @JsonIgnore
     private Point location;
 
     @Column(length = 50)
@@ -46,10 +48,13 @@ public class Store extends BaseTimeEntity{
     private String profileImg;
 
     @Enumerated(EnumType.STRING)
+    @Setter
     private StoreStatus status;
 
+    @Setter
     private LocalDateTime approvedAt;
 
+    @Setter
     private String rejectReason;
 
     @Builder
@@ -64,7 +69,9 @@ public class Store extends BaseTimeEntity{
             String bizNo,
             String backImg,
             String profileImg,
-            Point location
+            Point location,
+            LocalDateTime approvedAt,
+            String rejectReason
     ) {
         this.ownerId = ownerId;
         this.storeName = storeName;
@@ -78,6 +85,8 @@ public class Store extends BaseTimeEntity{
         this.backImg = backImg;
         this.profileImg = profileImg;
         this.status = StoreStatus.PENDING;
+        this.approvedAt = approvedAt;
+        this.rejectReason = rejectReason;
     }
 
 }
