@@ -20,12 +20,15 @@ public class Store extends BaseTimeEntity{
     private Long ownerId;
 
     @Column(nullable = false, length = 255)
+    @Setter
     private String storeName;
 
     @Column(columnDefinition = "text")
+    @Setter
     private String description;
 
     @Column(length = 20)
+    @Setter
     private String contactNo;
 
     @Column(length = 255)
@@ -42,9 +45,11 @@ public class Store extends BaseTimeEntity{
     private String bizNo;
 
     @Column(columnDefinition = "text")
+    @Setter
     private String backImg;
 
     @Column(columnDefinition = "text")
+    @Setter
     private String profileImg;
 
     @Enumerated(EnumType.STRING)

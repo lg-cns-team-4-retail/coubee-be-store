@@ -86,6 +86,7 @@ public class StoreService {
         return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude);
     }
 
+    @Transactional
     public void addInterestStore(Long userId, Long storeId) {
         storeRepository.findById(storeId).orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         Optional<InterestStore> exist= interestStoreRepository.findByUserIdAndStoreId(userId, storeId);
@@ -108,4 +109,20 @@ public class StoreService {
     public List<Store> getStatusList(StoreStatus status) {
         return storeRepository.findAllByStatus(status);
     }
+
+    public void storeUpdate(Long storeId, StoreDto store) {
+        Store newStore = storeRepository.findByStoreId(storeId).get();
+        newStore.setStoreName(store.getStoreName());
+        newStore.setDescription(store.getDescription());
+        newStore.setContactNo(store.getContactNo());
+        newStore.setProfileImg(store.getProfileImg());
+        newStore.setBackImg(store.getBackImg());
+        storeRepository.save(newStore);
+    }
+    
+    // public void storeDelete(Long storeId) {
+    //             Store store = storeRepository.findById(storeId)
+    //         .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
+    //         storeRepository.delete(store);
+    // }    
 }

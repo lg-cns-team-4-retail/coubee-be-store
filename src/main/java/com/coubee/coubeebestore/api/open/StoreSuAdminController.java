@@ -24,7 +24,7 @@ public class StoreSuAdminController {
     /* todo :
         1. 매장 등록 승인v
         2. 매장 삭제
-        3. 매장 등록 대기 목록 조회(?)
+        3. 매장 등록 대기 목록 조회(?)v
      */
 
     // 매장 등록 승인
@@ -33,6 +33,8 @@ public class StoreSuAdminController {
         storeService.storeApprove(storeId);
         return ApiResponseDto.defaultOk();
     }
+
+    // 매장 등록 반려
     @PostMapping("/reject/{storeId}")
     public ApiResponseDto<String> storeReject(@PathVariable Long storeId, @RequestBody String rejectReason) {
         storeService.storeReject(storeId, rejectReason);
@@ -44,6 +46,13 @@ public class StoreSuAdminController {
     public ApiResponseDto<List<Store>> getStatusList() {
         List<Store> list = storeService.getStatusList(StoreStatus.PENDING);
         return ApiResponseDto.readOk(list);
+    }
+
+    // 매장 삭제 승인
+    @PostMapping("/delete/{storeId}")
+    public ApiResponseDto<String> storeDelete(@PathVariable Long storeId) {
+        storeService.storeDelete(storeId);
+        return ApiResponseDto.defaultOk();
     }
     
 }
