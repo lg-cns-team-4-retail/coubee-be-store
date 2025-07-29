@@ -48,11 +48,9 @@ public class StoreSuAdminController {
         return ApiResponseDto.readOk(list);
     }
 
-    // 매장 삭제 승인
-    @PostMapping("/delete/{storeId}")
-    public ApiResponseDto<String> storeDelete(@PathVariable Long storeId) {
+    // 매장 삭제
+    @DeleteMapping("/delete/{storeId}")
+    public void storeDelete(@PathVariable Long storeId) {
         storeService.storeDelete(storeId);
-        return ApiResponseDto.defaultOk();
     }
-    
 }
