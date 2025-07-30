@@ -67,7 +67,7 @@ public class StoreAdminController {
     }
 
     // 매장 정보 수정
-    @PostMapping("/update/{storeId}")
+    @PutMapping("/update/{storeId}")
     public ApiResponseDto<String> storeUpdate(@PathVariable Long storeId, @RequestBody StoreDto storeDto) {
         storeService.storeUpdate(storeId, storeDto);
         return ApiResponseDto.defaultOk();

@@ -36,4 +36,6 @@ public class StoreDto {
     private LocalDateTime approvedAt;
 
     private String rejectReason;
+
+    private String category;
 }

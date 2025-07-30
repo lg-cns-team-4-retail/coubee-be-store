@@ -108,6 +108,7 @@ public class StoreService {
             interestStoreRepository.save(interest);
         }
     }
+    
     public List<Store> getMyInterestStores(Long userId){
         List<InterestStore> interestList = interestStoreRepository.findByUserId(userId);
         List<Long> storeIds = interestList.stream().map(InterestStore::getStoreId).toList();
