@@ -37,4 +37,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     Optional<Store> findByStoreId(Long storeId);
 
+    @Query(
+    "SELECT s FROM StoreEntity s " +
+    "LEFT JOIN s.tags t " +
+    "WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+    "OR LOWER(t) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+    List<Store> findAllByKeyword(@Param("keyword") String keyword);
+
 }

@@ -10,6 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Slf4j
 @RestController
@@ -48,4 +51,12 @@ public class StoreController {
         List<Store> stores = storeService.getMyInterestStores(userId);
         return ApiResponseDto.readOk(stores);
     }
+
+    // 매장 검색(매장 이름, 키워드 조회)
+    @GetMapping("/search")
+    public ApiResponseDto<?> searchStores(@RequestParam String keyword) {
+        List<Store> stores = storeService.getSearchStores(keyword);
+        return ApiResponseDto.readOk(stores);
+    }
+    
 }

@@ -15,4 +15,5 @@ public class StoreRegisterDto {
     private String bizNo;           // 사업자 등록번호
     private String backImg;          // 배경 이미지 URL
     private String profileImg;      // 프로필 이미지 URL
+    private String category;  // 카테고리
 }

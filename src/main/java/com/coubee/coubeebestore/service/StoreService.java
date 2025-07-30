@@ -19,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +37,11 @@ public class StoreService {
     public void storeRegister(Long ownerId, StoreRegisterDto registerDto) {
         Point location = geometryFactory.createPoint(new Coordinate(registerDto.getLongitude(), registerDto.getLatitude()));
         location.setSRID(4326);
+
+        List<String> categories = Arrays.stream(registerDto.getCategory().split(","))
+                                    .map(String::trim)
+                                    .collect(Collectors.toList());
+
         Store newStore = Store.builder()
                 .ownerId(ownerId)
                 .storeName(registerDto.getStoreName())
@@ -47,6 +54,7 @@ public class StoreService {
                 .bizNo(registerDto.getBizNo())
                 .backImg(registerDto.getBackImg())
                 .profileImg(registerDto.getProfileImg())
+                .category(categories)
                 .build();
         storeRepository.save(newStore);
     }
@@ -127,5 +135,10 @@ public class StoreService {
                 Store store = storeRepository.findById(storeId)
             .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
             storeRepository.delete(store);
-    }    
+    }
+
+    public List<Store> getSearchStores(String keyword) {
+
+        return storeRepository.findAllByKeyword(keyword);
+    }
 }

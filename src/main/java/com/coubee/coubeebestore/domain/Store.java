@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "store")
@@ -62,6 +64,10 @@ public class Store extends BaseTimeEntity{
     @Setter
     private String rejectReason;
 
+    @ElementCollection
+    @Setter
+    private List<String> category = new ArrayList<>();
+
     @Builder
     public Store(
             Long ownerId,
@@ -76,7 +82,8 @@ public class Store extends BaseTimeEntity{
             String profileImg,
             Point location,
             LocalDateTime approvedAt,
-            String rejectReason
+            String rejectReason,
+            List<String> category
     ) {
         this.ownerId = ownerId;
         this.storeName = storeName;
@@ -92,6 +99,7 @@ public class Store extends BaseTimeEntity{
         this.status = StoreStatus.PENDING;
         this.approvedAt = approvedAt;
         this.rejectReason = rejectReason;
+        this.category = category;
     }
 
 }
