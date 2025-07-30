@@ -141,4 +141,10 @@ public class StoreService {
 
         return storeRepository.findAllByKeyword(keyword);
     }
+
+    public Store getDetailStore(Long storeId) {
+        Store store = storeRepository.findByStoreId(storeId)
+                .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
+        return store;
+    }
 }
