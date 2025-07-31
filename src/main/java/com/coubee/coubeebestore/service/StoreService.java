@@ -6,6 +6,8 @@ import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
+import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
+import com.coubee.coubeebestore.domain.dto.StoreUpdateDto;
 import com.coubee.coubeebestore.domain.repository.InterestStoreRepository;
 import com.coubee.coubeebestore.domain.repository.StoreRepository;
 import com.coubee.coubeebestore.util.FileUploader;
@@ -68,7 +70,7 @@ public class StoreService {
         storeRepository.save(store);
     }
     @Transactional
-    public void storeReject(Long storeId,String rejectReason) {
+    public void storeReject(Long storeId, String rejectReason) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         store.setStatus(StoreStatus.REJECTED);
@@ -120,15 +122,19 @@ public class StoreService {
     }
 
     @Transactional
-    public void storeUpdate(Long storeId, StoreDto store) {
-        Store newStore = storeRepository.findByStoreId(storeId).get();
-        newStore.setStoreName(store.getStoreName());
-        newStore.setDescription(store.getDescription());
-        newStore.setContactNo(store.getContactNo());
-        newStore.setProfileImg(store.getProfileImg());
-        newStore.setBackImg(store.getBackImg());
-        newStore.getUpdatedAt();
-        storeRepository.save(newStore);
+    public void storeUpdate(StoreUpdateDto storeUpdateDto) {
+
+        Store store = storeRepository.findById(storeUpdateDto.getStoreId())
+                    .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
+
+        List<String> categories = Arrays.stream(storeUpdateDto.getCategory().split(","))
+                                    .map(String::trim)
+                                    .collect(Collectors.toList());
+
+        store.updateStore(storeUpdateDto);
+        store.setCategory(categories);
+
+        storeRepository.save(store);
     }
 
     @Transactional
@@ -139,13 +145,18 @@ public class StoreService {
     }
 
     public List<Store> getSearchStores(String keyword) {
-
         return storeRepository.findAllByKeyword(keyword);
     }
 
-    public Store getDetailStore(Long storeId) {
-        Store store = storeRepository.findByStoreId(storeId)
+    public StoreResponseDto getDetailStore(Long storeId) {
+        Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
-        return store;
+        return StoreResponseDto.from(store);
+    }
+
+    public StoreDto getStoreById(Long ownerId, Long storeId) {
+        Store store = storeRepository.findByOwnerIdAndStoreId(ownerId, storeId)
+                .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
+        return StoreDto.from(store);
     }
 }

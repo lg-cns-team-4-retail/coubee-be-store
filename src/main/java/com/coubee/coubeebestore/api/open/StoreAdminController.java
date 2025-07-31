@@ -5,6 +5,8 @@ import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
+import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
+import com.coubee.coubeebestore.domain.dto.StoreUpdateDto;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -33,7 +36,7 @@ public class StoreAdminController {
     @PostMapping("/register")
     public ApiResponseDto<String> storeRegister(@RequestBody StoreRegisterDto storeRegisterDto) {
         Long adminId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
-        storeService.storeRegister(adminId,storeRegisterDto);
+        storeService.storeRegister(adminId, storeRegisterDto);
         return ApiResponseDto.defaultOk();
     }
 
@@ -67,9 +70,17 @@ public class StoreAdminController {
     }
 
     // 매장 정보 수정
-    @PutMapping("/update/{storeId}")
-    public ApiResponseDto<String> storeUpdate(@PathVariable Long storeId, @RequestBody StoreDto storeDto) {
-        storeService.storeUpdate(storeId, storeDto);
+    @PostMapping("/update")
+    public ApiResponseDto<String> storeUpdate(@RequestBody StoreUpdateDto storeUpdateDto) {
+        storeService.storeUpdate(storeUpdateDto);
         return ApiResponseDto.defaultOk();
+    }
+
+    // 매장 상세 조회(점주)
+    @GetMapping("list/{storeId}")
+    public ApiResponseDto<?> getStoreById(@PathVariable Long storeId) {
+        Long adminId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        StoreDto store = storeService.getStoreById(adminId, storeId);
+        return ApiResponseDto.readOk(store);
     }
 }

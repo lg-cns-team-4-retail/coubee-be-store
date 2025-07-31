@@ -1,6 +1,7 @@
 package com.coubee.coubeebestore.domain.repository;
 
 
+import com.coubee.coubeebestore.domain.InterestStore;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
@@ -35,13 +36,12 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAllByStatus(StoreStatus status);
 
-    Optional<Store> findByStoreId(Long storeId);
-
     @Query(
     "SELECT s FROM Store s " +
     "LEFT JOIN s.category c " +
-    "WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+    "WHERE LOWER(s.storeName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
     "OR LOWER(c) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<Store> findAllByKeyword(@Param("keyword") String keyword);
 
+    Optional<Store> findByOwnerIdAndStoreId(Long ownerId, Long storeId);
 }

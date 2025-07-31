@@ -3,6 +3,7 @@ package com.coubee.coubeebestore.api.open;
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
 import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
 import com.coubee.coubeebestore.domain.Store;
+import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +64,8 @@ public class StoreController {
 
     // 매장 상세 조회
     @GetMapping("/detail/{storeId}")
-    public ApiResponseDto<?> getDetailStore(@PathVariable Long storeId) {
-        Store store = storeService.getDetailStore(storeId);
+    public ApiResponseDto<?> getStoreById(@PathVariable Long storeId) {
+        StoreResponseDto store = storeService.getDetailStore(storeId);
         return ApiResponseDto.readOk(store);
     }
     

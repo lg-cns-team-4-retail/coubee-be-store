@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.domain;
 
+import com.coubee.coubeebestore.domain.dto.StoreUpdateDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -100,6 +101,17 @@ public class Store extends BaseTimeEntity{
         this.approvedAt = approvedAt;
         this.rejectReason = rejectReason;
         this.category = category;
+    }
+
+    public void updateStore(StoreUpdateDto storeUpdateDto) {
+        this.storeName = storeName;
+        this.description = description;
+        this.contactNo = contactNo;
+        this.storeAddress = storeAddress;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.backImg = backImg;
+        this.profileImg = profileImg;
     }
 
 }
