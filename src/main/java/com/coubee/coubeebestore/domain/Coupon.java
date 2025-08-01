@@ -33,4 +33,23 @@ public class Coupon extends BaseTimeEntity{
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+
+    @Builder
+    public Coupon(
+        String title,
+        String content,
+        float discountRate,
+        int maxDiscount,
+        int amount,
+        LocalDateTime startDate,
+        LocalDateTime endDate
+    ) {
+        this.title = title;
+        this.content = content;
+        this.discountRate = discountRate;
+        this.maxDiscount = maxDiscount;
+        this.amount = amount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
