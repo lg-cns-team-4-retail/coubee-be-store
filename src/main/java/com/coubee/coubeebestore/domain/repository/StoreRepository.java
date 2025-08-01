@@ -1,10 +1,7 @@
 package com.coubee.coubeebestore.domain.repository;
 
-
-import com.coubee.coubeebestore.domain.InterestStore;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
-import com.coubee.coubeebestore.domain.dto.StoreDto;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

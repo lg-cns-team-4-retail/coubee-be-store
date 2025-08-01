@@ -7,7 +7,9 @@ import lombok.*;
 import org.locationtech.jts.geom.Point;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "store")
@@ -104,14 +106,18 @@ public class Store extends BaseTimeEntity{
     }
 
     public void updateStore(StoreUpdateDto storeUpdateDto) {
-        this.storeName = storeName;
-        this.description = description;
-        this.contactNo = contactNo;
-        this.storeAddress = storeAddress;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.backImg = backImg;
-        this.profileImg = profileImg;
+        this.storeName = storeUpdateDto.getStoreName();
+        this.description = storeUpdateDto.getDescription();
+        this.contactNo = storeUpdateDto.getContactNo();
+        this.storeAddress = storeUpdateDto.getStoreAddress();
+        this.latitude = storeUpdateDto.getLatitude();
+        this.longitude = storeUpdateDto.getLongitude();
+        this.backImg = storeUpdateDto.getBackImg();
+        this.profileImg = storeUpdateDto.getProfileImg();
+        
+        this.category = Arrays.stream(storeUpdateDto.getCategory().split(","))
+                                    .map(String::trim)
+                                    .collect(Collectors.toList());
     }
 
 }

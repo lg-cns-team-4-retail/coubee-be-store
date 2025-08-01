@@ -2,7 +2,6 @@ package com.coubee.coubeebestore.common.web.context;
 
 import com.coubee.coubeebestore.common.exception.NotFound;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

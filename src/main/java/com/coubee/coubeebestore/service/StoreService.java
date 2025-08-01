@@ -12,6 +12,8 @@ import com.coubee.coubeebestore.domain.repository.InterestStoreRepository;
 import com.coubee.coubeebestore.domain.repository.StoreRepository;
 import com.coubee.coubeebestore.util.FileUploader;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -26,7 +28,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class StoreService {
 
@@ -34,6 +38,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final InterestStoreRepository interestStoreRepository;
     private final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+    
 
     @Transactional
     public void storeRegister(Long ownerId, StoreRegisterDto registerDto) {
@@ -126,15 +131,9 @@ public class StoreService {
 
         Store store = storeRepository.findById(storeUpdateDto.getStoreId())
                     .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
-
-        List<String> categories = Arrays.stream(storeUpdateDto.getCategory().split(","))
-                                    .map(String::trim)
-                                    .collect(Collectors.toList());
-
         store.updateStore(storeUpdateDto);
-        store.setCategory(categories);
-
         storeRepository.save(store);
+        log.info("storeDto: {}, store: {}", storeUpdateDto.toString(), store.toString());
     }
 
     @Transactional
@@ -148,15 +147,18 @@ public class StoreService {
         return storeRepository.findAllByKeyword(keyword);
     }
 
+    @Transactional(readOnly = true)
     public StoreResponseDto getDetailStore(Long storeId) {
         Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         return StoreResponseDto.from(store);
     }
 
+    @Transactional(readOnly = true)
     public StoreDto getStoreById(Long ownerId, Long storeId) {
         Store store = storeRepository.findByOwnerIdAndStoreId(ownerId, storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
+        log.info("ownerId: {}","storeId: {}, store: {}", ownerId.toString(), storeId.toString(), store.toString());
         return StoreDto.from(store);
     }
 }
