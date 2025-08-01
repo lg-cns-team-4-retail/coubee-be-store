@@ -39,9 +39,8 @@ public class CouponController {
 
      // 매장별 쿠폰 목록 조회
      @GetMapping("/list")
-     public ApiResponseDto<List<Coupon>> couponList () {
-        Long adminId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
-        List<Coupon> list = couponService.getCouponList(adminId);
+     public ApiResponseDto<List<Coupon>> couponList (@RequestParam Long storeId) {
+        List<Coupon> list = couponService.getCouponList(storeId);
         return ApiResponseDto.readOk(list);
      }
 
