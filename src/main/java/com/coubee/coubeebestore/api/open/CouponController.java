@@ -3,7 +3,12 @@ package com.coubee.coubeebestore.api.open;
 import org.springframework.web.bind.annotation.*;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
+import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
+import com.coubee.coubeebestore.domain.Coupon;
+import com.coubee.coubeebestore.domain.dto.CouponCreateDto;
 import com.coubee.coubeebestore.service.CouponService;
+
+import java.util.List;
 
 import org.springframework.http.MediaType;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +30,19 @@ public class CouponController {
         4. 쿠폰 삭제
      */
 
+     // 쿠폰 생성
      @RequestMapping("/create")
      public ApiResponseDto<String> couponCreate (@RequestBody CouponCreateDto couponCreateDto) {
         couponService.createCoupon(couponCreateDto);
         return ApiResponseDto.defaultOk();
+     }
+
+     // 매장별 쿠폰 목록 조회
+     @GetMapping("/list")
+     public ApiResponseDto<List<Coupon>> couponList () {
+        Long adminId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        List<Coupon> list = couponService.getCouponList(adminId);
+        return ApiResponseDto.readOk(list);
      }
 
 }
