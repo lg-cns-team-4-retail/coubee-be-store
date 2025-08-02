@@ -40,7 +40,7 @@ public class CouponService {
     }
 
     public List<Coupon> getCouponList(Long storeId) {
-        return couponRepository.findAllByStoreId(storeId);
+        return couponRepository.findAllByStore_StoreId(storeId);
     }
 
     public void deleteCoupon(Long couponId) {
