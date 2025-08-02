@@ -43,5 +43,10 @@ public class CouponService {
         return couponRepository.findAllByStoreId(storeId);
     }
 
+    public void deleteCoupon(Long couponId) {
+        Coupon coupon = couponRepository.findById(couponId)
+                    .orElseThrow(() -> new NotFound("해당 쿠폰을 찾을 수 없습니다."));
+        couponRepository.delete(coupon);
+    }
 
 }

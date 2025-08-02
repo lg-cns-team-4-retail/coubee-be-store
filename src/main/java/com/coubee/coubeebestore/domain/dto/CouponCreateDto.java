@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class CouponCreateDto {
     private Long storeId;
+    
     private String title;
     private String content;
     private float discountRate;

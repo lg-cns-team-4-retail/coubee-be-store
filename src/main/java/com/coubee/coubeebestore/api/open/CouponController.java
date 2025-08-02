@@ -24,24 +24,31 @@ public class CouponController {
     private final CouponService couponService;
 
     /* todo :
-        1. 쿠폰 생성
-        2. 매장별 쿠폰 목록 조회
-        3. 쿠폰 내용 상세 조회?
-        4. 쿠폰 삭제
+        1. 쿠폰 생성 v
+        2. 매장별 쿠폰 목록 조회 v
+        3. 쿠폰 내용 상세 조회(?)
+        4. 쿠폰 삭제 v
      */
 
      // 쿠폰 생성
      @RequestMapping("/create")
-     public ApiResponseDto<String> couponCreate (@RequestBody CouponCreateDto couponCreateDto) {
+     public ApiResponseDto<String> couponCreate(@RequestBody CouponCreateDto couponCreateDto) {
         couponService.createCoupon(couponCreateDto);
         return ApiResponseDto.defaultOk();
      }
 
      // 매장별 쿠폰 목록 조회
      @GetMapping("/list")
-     public ApiResponseDto<List<Coupon>> couponList (@RequestParam Long storeId) {
+     public ApiResponseDto<List<Coupon>> couponList(@RequestParam Long storeId) {
         List<Coupon> list = couponService.getCouponList(storeId);
         return ApiResponseDto.readOk(list);
+     }
+
+     // 쿠폰 삭제
+     @DeleteMapping("/delete/{couponId}")
+     public ApiResponseDto<String> couponDelete(@PathVariable Long couponId) {
+        couponService.deleteCoupon(couponId);
+        return ApiResponseDto.defaultOk();
      }
 
 }
