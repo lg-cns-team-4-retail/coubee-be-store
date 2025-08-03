@@ -8,12 +8,15 @@ import lombok.Setter;
 public class StoreRegisterDto {
     private String storeName;       // 매장이름
     private String description;     // 매장 설명
+    private String bizOwnerName;     // 사업자 이름
     private String contactNo;       // 연락처
     private String storeAddress;     // 주소
     private Double latitude;        // 위도
     private Double longitude;       // 경도
     private String bizNo;           // 사업자 등록번호
+    private String workingHour;     // 영업시간
     private String backImg;          // 배경 이미지 URL
     private String profileImg;      // 프로필 이미지 URL
-    private String category;  // 카테고리
+    private String bizImg;          // 사업자 등록증 이미지 URL
+    private String storeTag;  // 태그 (과일,사과)
 }
