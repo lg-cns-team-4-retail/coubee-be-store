@@ -1,0 +1,81 @@
+package com.coubee.coubeebestore.domain.mapper;
+
+import com.coubee.coubeebestore.domain.Store;
+import com.coubee.coubeebestore.domain.dto.StoreDto;
+import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
+import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
+
+import java.util.stream.Collectors;
+
+public class StoreMapper {
+
+    public static Store toEntity(Long ownerId, StoreRegisterDto dto){
+        GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+        Point location = geometryFactory.createPoint(new Coordinate(dto.getLongitude(), dto.getLatitude()));
+        location.setSRID(4326);
+        return Store.builder()
+                .ownerId(ownerId)
+                .storeName(dto.getStoreName())
+                .description(dto.getDescription())
+                .contactNo(dto.getContactNo())
+                .storeAddress(dto.getStoreAddress())
+                .latitude(dto.getLatitude())
+                .longitude(dto.getLongitude())
+                .location(location)
+                .bizNo(dto.getBizNo())
+                .backImg(dto.getBackImg())
+                .profileImg(dto.getProfileImg())
+                .build();
+    }
+
+
+    public static StoreDto fromEntity(Store store) {
+        StoreDto dto = new StoreDto();
+        dto.setStoreId(store.getStoreId());
+        dto.setOwnerId(store.getOwnerId());
+        dto.setStoreName(store.getStoreName());
+        dto.setDescription(store.getDescription());
+        dto.setContactNo(store.getContactNo());
+        dto.setStoreAddress(store.getStoreAddress());
+        dto.setLatitude(store.getLatitude());
+        dto.setLongitude(store.getLongitude());
+        dto.setBizNo(store.getBizNo());
+        dto.setBackImg(store.getBackImg());
+        dto.setProfileImg(store.getProfileImg());
+        dto.setStatus(store.getStatus());
+        dto.setApprovedAt(store.getApprovedAt());
+        dto.setRejectReason(store.getRejectReason());
+        String storeTag = store.getStoreCategories().stream()
+                .map(storeCategory -> storeCategory.getCategory().getName())
+                .collect(Collectors.joining(","));
+        dto.setStoreTag(storeTag);
+        return dto;
+    }
+    public static StoreDto fromEntity(Store store,double distance) {
+        StoreDto dto = fromEntity(store);
+        dto.setDistance(distance);
+        return dto;
+    }
+    public static StoreResponseDto fromEntityForUser(Store store) {
+        StoreResponseDto dto = new StoreResponseDto();
+
+        String storeTag = store.getStoreCategories().stream()
+                .map(sc -> sc.getCategory().getName())
+                .collect(Collectors.joining(","));
+
+        dto.setStoreId(store.getStoreId());
+        dto.setStoreName(store.getStoreName());
+        dto.setDescription(store.getDescription());
+        dto.setContactNo(store.getContactNo());
+        dto.setStoreAddress(store.getStoreAddress());
+        dto.setBackImg(store.getBackImg());
+        dto.setProfileImg(store.getProfileImg());
+        dto.setStoreTag(storeTag);
+
+        return dto;
+    }
+}

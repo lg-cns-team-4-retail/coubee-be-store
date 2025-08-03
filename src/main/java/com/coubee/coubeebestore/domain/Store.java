@@ -66,10 +66,12 @@ public class Store extends BaseTimeEntity{
 
     @Setter
     private String rejectReason;
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StoreCategory> storeCategories = new ArrayList<>();
+//    @ElementCollection
+//    @Setter
+//    private List<String> category = new ArrayList<>();
 
-    @ElementCollection
-    @Setter
-    private List<String> category = new ArrayList<>();
 
     @Builder
     public Store(
@@ -85,8 +87,7 @@ public class Store extends BaseTimeEntity{
             String profileImg,
             Point location,
             LocalDateTime approvedAt,
-            String rejectReason,
-            List<String> category
+            String rejectReason
     ) {
         this.ownerId = ownerId;
         this.storeName = storeName;
@@ -102,7 +103,6 @@ public class Store extends BaseTimeEntity{
         this.status = StoreStatus.PENDING;
         this.approvedAt = approvedAt;
         this.rejectReason = rejectReason;
-        this.category = category;
     }
 
     public void updateStore(StoreUpdateDto storeUpdateDto) {
@@ -114,10 +114,6 @@ public class Store extends BaseTimeEntity{
         this.longitude = storeUpdateDto.getLongitude();
         this.backImg = storeUpdateDto.getBackImg();
         this.profileImg = storeUpdateDto.getProfileImg();
-        
-        this.category = Arrays.stream(storeUpdateDto.getCategory().split(","))
-                                    .map(String::trim)
-                                    .collect(Collectors.toList());
     }
 
 }

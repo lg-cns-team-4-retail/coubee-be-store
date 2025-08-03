@@ -1,9 +1,15 @@
 package com.coubee.coubeebestore.domain.dto;
 
+import com.coubee.coubeebestore.domain.Category;
 import com.coubee.coubeebestore.domain.Store;
 
+import com.coubee.coubeebestore.domain.StoreStatus;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -15,22 +21,5 @@ public class StoreResponseDto {
     private String storeAddress;     // 주소
     private String backImg;          // 배경 이미지 URL
     private String profileImg;      // 프로필 이미지 URL
-    private String category;  // 카테고리
-
-    public static StoreResponseDto from(Store store) {
-
-        StoreResponseDto dto = new StoreResponseDto();
-        
-        String categories = String.join(", ", store.getCategory());
-        
-        dto.setStoreName(store.getStoreName());
-        dto.setDescription(store.getDescription());
-        dto.setContactNo(store.getContactNo());
-        dto.setStoreAddress(store.getStoreAddress());
-        dto.setBackImg(store.getBackImg());
-        dto.setProfileImg(store.getProfileImg());
-        dto.setCategory(categories);
-
-        return dto;
-    }
+    private String storeTag;  // 카테고리
 }

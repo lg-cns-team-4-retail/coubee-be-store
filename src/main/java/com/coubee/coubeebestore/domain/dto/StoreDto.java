@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -25,25 +26,10 @@ public class StoreDto {
     private StoreStatus status;
     private LocalDateTime approvedAt;
     private String rejectReason;
-    private String category;
+    private String storeTag;
 
-    public static StoreDto from(Store store) {
 
-        StoreDto dto = new StoreDto();
-        
-        String categories = String.join(", ", store.getCategory());
-        
-        dto.setStoreName(store.getStoreName());
-        dto.setDescription(store.getDescription());
-        dto.setContactNo(store.getContactNo());
-        dto.setStoreAddress(store.getStoreAddress());
-        dto.setLatitude(store.getLatitude());
-        dto.setLongitude(store.getLongitude());
-        dto.setBizNo(store.getBizNo());
-        dto.setBackImg(store.getBackImg());
-        dto.setProfileImg(store.getProfileImg());
-        dto.setCategory(categories);
+    private double distance;
 
-        return dto;
-    }
+
 }
