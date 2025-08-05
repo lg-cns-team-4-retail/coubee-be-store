@@ -33,6 +33,9 @@ public class Coupon extends BaseTimeEntity{
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+    @Enumerated(EnumType.STRING)
+    @Setter
+    private CouponStatus status;
 
     @Builder
     public Coupon(
@@ -51,5 +54,6 @@ public class Coupon extends BaseTimeEntity{
 //        this.amount = amount;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.status = CouponStatus.ACTIVE;
     }
 }
