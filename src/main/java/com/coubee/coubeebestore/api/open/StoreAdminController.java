@@ -8,7 +8,6 @@ import com.coubee.coubeebestore.domain.dto.StoreUpdateDto;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

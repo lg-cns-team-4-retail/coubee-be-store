@@ -57,6 +57,12 @@ public class Store extends BaseTimeEntity{
     @Setter
     private String profileImg;
 
+    @Setter
+    private int openingTime;
+
+    @Setter
+    private int closingTime;
+
     @Enumerated(EnumType.STRING)
     @Setter
     private StoreStatus status;
@@ -66,6 +72,7 @@ public class Store extends BaseTimeEntity{
 
     @Setter
     private String rejectReason;
+
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreCategory> storeCategories = new ArrayList<>();
 //    @ElementCollection
