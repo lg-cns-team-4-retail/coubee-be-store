@@ -189,7 +189,7 @@ public class StoreService {
     // 매장 상세 조회
     @Transactional(readOnly = true)
     public StoreResponseDto getStoreById(Long storeId) {
-        Store store = storeRepository.findById(storeId)
+        Store store = storeRepository.findStoreWithCategories(storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         if (store.getStatus().equals(StoreStatus.PENDING)) {
             throw new BadParameter("아직 승인을 기다리고 있는 매장입니다");
