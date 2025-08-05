@@ -153,7 +153,7 @@ public class StoreService {
 
     // 일반 사용자 기능
     // 근처 매장 조회
-    public List<StoreDto> getNearStoreList(Double latitude, Double longitude) {
+    public List<StoreResponseDto> getNearStoreList(Double latitude, Double longitude) {
         return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500)
                 .stream()
                 .map(store -> {
