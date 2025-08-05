@@ -31,7 +31,7 @@ public class CouponService {
                 .content(couponCreateDto.getContent())
                 .discountRate(couponCreateDto.getDiscountRate())
                 .maxDiscount(couponCreateDto.getMaxDiscount())
-                .amount(couponCreateDto.getAmount())
+//                .amount(couponCreateDto.getAmount())
                 .startDate(LocalDateTime.parse(couponCreateDto.getStartDate()))
                 .endDate(LocalDateTime.parse(couponCreateDto.getEndDate()))
                 .build();

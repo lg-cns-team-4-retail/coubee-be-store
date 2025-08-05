@@ -12,7 +12,7 @@ public class CouponCreateDto {
     private String content;
     private float discountRate;
     private int maxDiscount;
-    private int amount;
+//    private int amount;
 
     private String startDate;
     private String endDate;
