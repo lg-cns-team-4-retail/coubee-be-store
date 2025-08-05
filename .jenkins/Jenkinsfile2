@@ -3,6 +3,7 @@ def APP_NAME
 def APP_VERSION
 def DOCKER_IMAGE_NAME
 def PROD_BUILD = false
+
 pipeline {
     agent {
         node {
@@ -12,15 +13,16 @@ pipeline {
 
     parameters {
         gitParameter branch: '',
-                    branchFilter: '.*',
-                    defaultValue: 'origin/main',
-                    description: '', listSize: '0',
-                    name: 'TAG',
-                    quickFilterEnabled: false,
-                    selectedValue: 'DEFAULT',
-                    sortMode: 'DESCENDING_SMART',
-                    tagFilter: '*',
-                    type: 'PT_BRANCH_TAG'
+                branchFilter: '.*',
+                defaultValue: 'origin/main',
+                description: '',
+                listSize: '0',
+                name: 'TAG',
+                quickFilterEnabled: false,
+                selectedValue: 'DEFAULT',
+                sortMode: 'DESCENDING_SMART',
+                tagFilter: '*',
+                type: 'PT_BRANCH_TAG'
 
         booleanParam defaultValue: false, description: '', name: 'RELEASE'
     }
@@ -29,6 +31,7 @@ pipeline {
         GIT_URL = "https://github.com/lg-cns-team-4-retail/coubee-be-store.git"
         GITHUB_CREDENTIAL = "github-token"
         ARTIFACTS = "build/libs/**"
+        DOCKER_REGISTRY = "moonjiuk"
 
         // ECR 관련 환경 변수
         AWS_REGION = "ap-northeast-2"
@@ -71,10 +74,10 @@ pipeline {
                     sh "echo TAG is ${params.TAG}"
                     if( params.TAG.startsWith('origin') == false && params.TAG.endsWith('/main') == false ) {
                         if( params.RELEASE == true ) {
-                            DOCKER_IMAGE_VERSION += '-RELEASE'
+                            APP_VERSION += '-RELEASE'
                             PROD_BUILD = true
                         } else {
-                            DOCKER_IMAGE_VERSION += '-TAG'
+                            APP_VERSION += '-TAG'
                         }
                     }
                 }
