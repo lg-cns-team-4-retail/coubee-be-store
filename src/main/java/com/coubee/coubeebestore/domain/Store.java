@@ -68,9 +68,6 @@ public class Store extends BaseTimeEntity{
     private String rejectReason;
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreCategory> storeCategories = new ArrayList<>();
-//    @ElementCollection
-//    @Setter
-//    private List<String> category = new ArrayList<>();
 
 
     @Builder

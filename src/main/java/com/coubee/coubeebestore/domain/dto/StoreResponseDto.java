@@ -21,5 +21,6 @@ public class StoreResponseDto {
     private String storeAddress;     // 주소
     private String backImg;          // 배경 이미지 URL
     private String profileImg;      // 프로필 이미지 URL
-    private String storeTag;  // 카테고리
+//    private String storeTag;  // 카테고리
+    private List<Category> storeTag;
 }

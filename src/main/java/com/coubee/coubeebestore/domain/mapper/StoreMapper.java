@@ -1,6 +1,8 @@
 package com.coubee.coubeebestore.domain.mapper;
 
+import com.coubee.coubeebestore.domain.Category;
 import com.coubee.coubeebestore.domain.Store;
+import com.coubee.coubeebestore.domain.StoreCategory;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
 import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
@@ -9,7 +11,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class StoreMapper {
 
@@ -49,9 +51,11 @@ public class StoreMapper {
         dto.setStatus(store.getStatus());
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
-        String storeTag = store.getStoreCategories().stream()
-                .map(storeCategory -> storeCategory.getCategory().getName())
-                .collect(Collectors.joining(","));
+//        String storeTag = store.getStoreCategories().stream()
+//                .map(storeCategory -> storeCategory.getCategory().getName())
+//                .collect(Collectors.joining(","));
+//        dto.setStoreTag(storeTag);
+        List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
         dto.setStoreTag(storeTag);
         return dto;
     }
@@ -62,10 +66,10 @@ public class StoreMapper {
     }
     public static StoreResponseDto fromEntityForUser(Store store) {
         StoreResponseDto dto = new StoreResponseDto();
-
-        String storeTag = store.getStoreCategories().stream()
-                .map(sc -> sc.getCategory().getName())
-                .collect(Collectors.joining(","));
+//
+//        String storeTag = store.getStoreCategories().stream()
+//                .map(sc -> sc.getCategory().getName())
+//                .collect(Collectors.joining(","));
 
         dto.setStoreId(store.getStoreId());
         dto.setStoreName(store.getStoreName());
@@ -74,6 +78,7 @@ public class StoreMapper {
         dto.setStoreAddress(store.getStoreAddress());
         dto.setBackImg(store.getBackImg());
         dto.setProfileImg(store.getProfileImg());
+        List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
         dto.setStoreTag(storeTag);
 
         return dto;

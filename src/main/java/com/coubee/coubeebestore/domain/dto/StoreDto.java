@@ -1,11 +1,13 @@
 package com.coubee.coubeebestore.domain.dto;
 
+import com.coubee.coubeebestore.domain.Category;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
@@ -26,7 +28,9 @@ public class StoreDto {
     private StoreStatus status;
     private LocalDateTime approvedAt;
     private String rejectReason;
-    private String storeTag;
+//    private String storeTag;
+
+    private List<Category> storeTag;
 
 
     private double distance;
