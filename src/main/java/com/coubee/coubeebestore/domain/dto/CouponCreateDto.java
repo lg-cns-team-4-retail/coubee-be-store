@@ -4,6 +4,8 @@ import com.coubee.coubeebestore.domain.Store;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class CouponCreateDto {
     private Long storeId;
@@ -14,6 +16,6 @@ public class CouponCreateDto {
     private int maxDiscount;
 //    private int amount;
 
-    private String startDate;
-    private String endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }

@@ -38,6 +38,7 @@ public class CouponController {
      }
 
      // 매장별 쿠폰 목록 조회
+    // coupon 조회시 enddate가 지났을때 Expired로 상태 변경후 리턴
      @GetMapping("/list")
      public ApiResponseDto<List<Coupon>> couponList(@RequestParam Long storeId) {
         List<Coupon> list = couponService.getCouponList(storeId);
