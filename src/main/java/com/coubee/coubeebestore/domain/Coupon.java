@@ -29,7 +29,7 @@ public class Coupon extends BaseTimeEntity{
 
     private float discountRate;
     private int maxDiscount;
-    private int amount;
+//    private int amount;
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
@@ -40,7 +40,7 @@ public class Coupon extends BaseTimeEntity{
         String content,
         float discountRate,
         int maxDiscount,
-        int amount,
+//        int amount,
         LocalDateTime startDate,
         LocalDateTime endDate
     ) {
@@ -48,7 +48,7 @@ public class Coupon extends BaseTimeEntity{
         this.content = content;
         this.discountRate = discountRate;
         this.maxDiscount = maxDiscount;
-        this.amount = amount;
+//        this.amount = amount;
         this.startDate = startDate;
         this.endDate = endDate;
     }
