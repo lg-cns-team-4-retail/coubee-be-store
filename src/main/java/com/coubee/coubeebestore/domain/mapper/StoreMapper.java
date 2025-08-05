@@ -51,26 +51,17 @@ public class StoreMapper {
         dto.setStatus(store.getStatus());
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
-//        String storeTag = store.getStoreCategories().stream()
-//                .map(storeCategory -> storeCategory.getCategory().getName())
-//                .collect(Collectors.joining(","));
-//        dto.setStoreTag(storeTag);
         List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
         dto.setStoreTag(storeTag);
         return dto;
     }
-    public static StoreDto fromEntity(Store store,double distance) {
-        StoreDto dto = fromEntity(store);
+    public static StoreResponseDto fromEntity(Store store,double distance) {
+        StoreResponseDto dto = fromEntityForUser(store);
         dto.setDistance(distance);
         return dto;
     }
     public static StoreResponseDto fromEntityForUser(Store store) {
         StoreResponseDto dto = new StoreResponseDto();
-//
-//        String storeTag = store.getStoreCategories().stream()
-//                .map(sc -> sc.getCategory().getName())
-//                .collect(Collectors.joining(","));
-
         dto.setStoreId(store.getStoreId());
         dto.setStoreName(store.getStoreName());
         dto.setDescription(store.getDescription());
@@ -78,6 +69,8 @@ public class StoreMapper {
         dto.setStoreAddress(store.getStoreAddress());
         dto.setBackImg(store.getBackImg());
         dto.setProfileImg(store.getProfileImg());
+        dto.setLongitude(store.getLongitude());
+        dto.setLatitude(store.getLatitude());
         List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
         dto.setStoreTag(storeTag);
 
