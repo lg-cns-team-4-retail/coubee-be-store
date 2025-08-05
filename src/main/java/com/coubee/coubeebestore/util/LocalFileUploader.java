@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.util;
 
+import com.coubee.coubeebestore.common.exception.BadParameter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
@@ -31,7 +32,8 @@ public class LocalFileUploader implements FileUploader {
         try {
             file.transferTo(dest);
         } catch (IOException e) {
-            throw new RuntimeException("로컬 파일 업로드 실패", e);
+            e.printStackTrace();
+            throw new BadParameter("파일 업로드 실패");
         }
 
         // 웹 URL 경로로 반환
