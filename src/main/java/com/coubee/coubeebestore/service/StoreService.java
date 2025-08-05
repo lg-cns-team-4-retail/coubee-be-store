@@ -41,6 +41,7 @@ public class StoreService {
     public void storeRegister(Long ownerId, StoreRegisterDto registerDto) {
 
         Store newStore = storeRepository.save(StoreMapper.toEntity(ownerId, registerDto));
+        storeRepository.flush();
         List<String> tagNames = Arrays.stream(registerDto.getStoreTag().split(",")).toList();
         categoryRegister(newStore, tagNames);
     }
