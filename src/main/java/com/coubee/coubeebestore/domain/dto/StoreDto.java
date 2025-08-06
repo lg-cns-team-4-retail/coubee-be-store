@@ -20,6 +20,7 @@ public class StoreDto {
     private String description;
     private String contactNo;
     private String storeAddress;
+    private String workingHour;
     private double latitude;
     private double longitude;
     private String bizNo;
