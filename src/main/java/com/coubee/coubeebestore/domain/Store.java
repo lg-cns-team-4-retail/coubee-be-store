@@ -36,6 +36,8 @@ public class Store extends BaseTimeEntity{
     @Setter
     private String contactNo;
 
+    private String workingHour;
+
     @Column(length = 255)
     private String storeAddress;
 
@@ -77,6 +79,7 @@ public class Store extends BaseTimeEntity{
             String description,
             String contactNo,
             String storeAddress,
+            String workingHour,
             double latitude,
             double longitude,
             String bizNo,
@@ -91,6 +94,7 @@ public class Store extends BaseTimeEntity{
         this.description = description;
         this.contactNo = contactNo;
         this.storeAddress = storeAddress;
+        this.workingHour = workingHour;
         this.latitude = latitude;
         this.longitude = longitude;
         this.location = location;
@@ -107,6 +111,7 @@ public class Store extends BaseTimeEntity{
         this.description = storeUpdateDto.getDescription();
         this.contactNo = storeUpdateDto.getContactNo();
         this.storeAddress = storeUpdateDto.getStoreAddress();
+        this.workingHour = storeUpdateDto.getWorkingHour();
         this.latitude = storeUpdateDto.getLatitude();
         this.longitude = storeUpdateDto.getLongitude();
         this.backImg = storeUpdateDto.getBackImg();

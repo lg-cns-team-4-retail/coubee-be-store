@@ -11,6 +11,7 @@ public class StoreUpdateDto {
     private String description;     // 매장 설명
     private String contactNo;       // 연락처
     private String storeAddress;     // 주소
+    private String workingHour;
     private Double latitude;        // 위도
     private Double longitude;       // 경도
     private String backImg;          // 배경 이미지 URL

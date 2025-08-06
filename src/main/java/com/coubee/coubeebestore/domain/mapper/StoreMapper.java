@@ -25,6 +25,7 @@ public class StoreMapper {
                 .description(dto.getDescription())
                 .contactNo(dto.getContactNo())
                 .storeAddress(dto.getStoreAddress())
+                .workingHour(dto.getWorkingHour())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .location(location)
@@ -43,6 +44,7 @@ public class StoreMapper {
         dto.setDescription(store.getDescription());
         dto.setContactNo(store.getContactNo());
         dto.setStoreAddress(store.getStoreAddress());
+        dto.setWorkingHour(store.getWorkingHour());
         dto.setLatitude(store.getLatitude());
         dto.setLongitude(store.getLongitude());
         dto.setBizNo(store.getBizNo());
@@ -67,6 +69,7 @@ public class StoreMapper {
         dto.setDescription(store.getDescription());
         dto.setContactNo(store.getContactNo());
         dto.setStoreAddress(store.getStoreAddress());
+        dto.setWorkingHour(store.getWorkingHour());
         dto.setBackImg(store.getBackImg());
         dto.setProfileImg(store.getProfileImg());
         dto.setLongitude(store.getLongitude());
