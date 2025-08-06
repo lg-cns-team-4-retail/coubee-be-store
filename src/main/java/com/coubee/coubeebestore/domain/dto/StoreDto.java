@@ -31,7 +31,7 @@ public class StoreDto {
     private String rejectReason;
 //    private String storeTag;
 
-    private List<Category> storeTag;
+    private List<CategoryDto> storeTag;
 
 
     private double distance;

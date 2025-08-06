@@ -25,6 +25,6 @@ public class StoreResponseDto {
     private double longitude;
     private double latitude;
 //    private String storeTag;  // 카테고리
-    private List<Category> storeTag;
+    private List<CategoryDto> storeTag;
     private double distance;
 }
