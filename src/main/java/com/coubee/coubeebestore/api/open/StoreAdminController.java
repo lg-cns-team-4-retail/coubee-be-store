@@ -64,9 +64,9 @@ public class StoreAdminController {
 
     // 매장 정보 수정
     @PostMapping("/update")
-    public ApiResponseDto<String> storeUpdate(@RequestBody StoreUpdateDto storeUpdateDto) {
-        storeService.storeUpdate(storeUpdateDto);
-        return ApiResponseDto.defaultOk();
+    public ApiResponseDto<StoreDto> storeUpdate(@RequestBody StoreUpdateDto storeUpdateDto) {
+        StoreDto storeDto = storeService.storeUpdate(storeUpdateDto);
+        return ApiResponseDto.createOk(storeDto);
     }
 
     // 매장 상세 조회(점주)
