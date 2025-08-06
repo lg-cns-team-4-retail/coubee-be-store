@@ -27,8 +27,8 @@ public class StoreController {
 
     // 매장 목록 조회(위치기반)
     @GetMapping("/near")
-    public ApiResponseDto<List<StoreDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng) {
-        List<StoreDto> storeList = storeService.getNearStoreList(lat, lng);
+    public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng) {
+        List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng);
         return ApiResponseDto.readOk(storeList);
     }
 

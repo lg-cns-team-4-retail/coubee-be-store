@@ -41,6 +41,7 @@ public class StoreService {
     public void storeRegister(Long ownerId, StoreRegisterDto registerDto) {
 
         Store newStore = storeRepository.save(StoreMapper.toEntity(ownerId, registerDto));
+        storeRepository.flush();
         List<String> tagNames = Arrays.stream(registerDto.getStoreTag().split(",")).toList();
         categoryRegister(newStore, tagNames);
     }
@@ -153,7 +154,7 @@ public class StoreService {
 
     // 일반 사용자 기능
     // 근처 매장 조회
-    public List<StoreDto> getNearStoreList(Double latitude, Double longitude) {
+    public List<StoreResponseDto> getNearStoreList(Double latitude, Double longitude) {
         return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500)
                 .stream()
                 .map(store -> {
@@ -189,7 +190,7 @@ public class StoreService {
     // 매장 상세 조회
     @Transactional(readOnly = true)
     public StoreResponseDto getStoreById(Long storeId) {
-        Store store = storeRepository.findById(storeId)
+        Store store = storeRepository.findStoreWithCategories(storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         if (store.getStatus().equals(StoreStatus.PENDING)) {
             throw new BadParameter("아직 승인을 기다리고 있는 매장입니다");

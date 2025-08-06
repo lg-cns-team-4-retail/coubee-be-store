@@ -1,6 +1,8 @@
 package com.coubee.coubeebestore.domain.mapper;
 
+import com.coubee.coubeebestore.domain.Category;
 import com.coubee.coubeebestore.domain.Store;
+import com.coubee.coubeebestore.domain.StoreCategory;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
 import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
@@ -9,7 +11,7 @@ import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
 
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class StoreMapper {
 
@@ -23,6 +25,7 @@ public class StoreMapper {
                 .description(dto.getDescription())
                 .contactNo(dto.getContactNo())
                 .storeAddress(dto.getStoreAddress())
+                .workingHour(dto.getWorkingHour())
                 .latitude(dto.getLatitude())
                 .longitude(dto.getLongitude())
                 .location(location)
@@ -41,6 +44,7 @@ public class StoreMapper {
         dto.setDescription(store.getDescription());
         dto.setContactNo(store.getContactNo());
         dto.setStoreAddress(store.getStoreAddress());
+        dto.setWorkingHour(store.getWorkingHour());
         dto.setLatitude(store.getLatitude());
         dto.setLongitude(store.getLongitude());
         dto.setBizNo(store.getBizNo());
@@ -49,31 +53,28 @@ public class StoreMapper {
         dto.setStatus(store.getStatus());
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
-        String storeTag = store.getStoreCategories().stream()
-                .map(storeCategory -> storeCategory.getCategory().getName())
-                .collect(Collectors.joining(","));
+        List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
         dto.setStoreTag(storeTag);
         return dto;
     }
-    public static StoreDto fromEntity(Store store,double distance) {
-        StoreDto dto = fromEntity(store);
+    public static StoreResponseDto fromEntity(Store store,double distance) {
+        StoreResponseDto dto = fromEntityForUser(store);
         dto.setDistance(distance);
         return dto;
     }
     public static StoreResponseDto fromEntityForUser(Store store) {
         StoreResponseDto dto = new StoreResponseDto();
-
-        String storeTag = store.getStoreCategories().stream()
-                .map(sc -> sc.getCategory().getName())
-                .collect(Collectors.joining(","));
-
         dto.setStoreId(store.getStoreId());
         dto.setStoreName(store.getStoreName());
         dto.setDescription(store.getDescription());
         dto.setContactNo(store.getContactNo());
         dto.setStoreAddress(store.getStoreAddress());
+        dto.setWorkingHour(store.getWorkingHour());
         dto.setBackImg(store.getBackImg());
         dto.setProfileImg(store.getProfileImg());
+        dto.setLongitude(store.getLongitude());
+        dto.setLatitude(store.getLatitude());
+        List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
         dto.setStoreTag(storeTag);
 
         return dto;
