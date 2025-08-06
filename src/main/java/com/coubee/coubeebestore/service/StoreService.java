@@ -42,7 +42,8 @@ public class StoreService {
 
         Store newStore = storeRepository.save(StoreMapper.toEntity(ownerId, registerDto));
         storeRepository.flush();
-        List<String> tagNames = Arrays.stream(registerDto.getStoreTag().split(",")).toList();
+        List<String> tagNames = Arrays.stream(registerDto.getStoreTag().split(","))
+                .map(String::trim).distinct().toList();
         categoryRegister(newStore, tagNames);
     }
 
@@ -68,6 +69,12 @@ public class StoreService {
                         .build())
                 .toList();
         storeCategoryRepository.saveAll(storeCategories);
+        storeCategoryRepository.flush();
+    }
+
+    public void storeCategoryDelete(Long storeId){
+        storeCategoryRepository.deleteAllByStore_StoreId(storeId);
+        storeCategoryRepository.flush();
     }
 
     // 점주 소유 매장 리스트 조회
@@ -92,10 +99,16 @@ public class StoreService {
     // 매장 정보 수정
     @Transactional
     public StoreDto storeUpdate(StoreUpdateDto storeUpdateDto) {
+        storeCategoryDelete(storeUpdateDto.getStoreId());
         Store store = storeRepository.findById(storeUpdateDto.getStoreId())
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         store.updateStore(storeUpdateDto);
-        return StoreMapper.fromEntity(storeRepository.save(store));
+        List<String> tagNames = Arrays.stream(storeUpdateDto.getStoreTag().split(","))
+                .map(String::trim).distinct().toList();
+        categoryRegister(store, tagNames);
+        storeRepository.flush();
+        Store savedStore = storeRepository.findStoreWithCategories(storeUpdateDto.getStoreId()).orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
+        return StoreMapper.fromEntity(savedStore);
     }
 
     /// 매장 등록시에 필요한 이미지 저장 1.백그라운드이미지 2.매장프로필이미지 3.사업자등록증이미지
