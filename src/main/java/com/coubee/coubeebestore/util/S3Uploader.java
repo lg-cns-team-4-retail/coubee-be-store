@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -73,7 +72,7 @@ public class S3Uploader implements FileUploader{
     private String cloudFrontDomain;
 
     private String getUrl(String path) {
-        return "https://" + cloudFrontDomain + "/" + path;
+        return "https://" + cloudFrontDomain + path;
     }
     /**
      * S3 URL에서 key 추출
