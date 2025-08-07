@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
 import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
 import com.coubee.coubeebestore.domain.Coupon;
-import com.coubee.coubeebestore.domain.dto.CouponCreateDto;
 import com.coubee.coubeebestore.service.CouponService;
 
 import java.util.List;
@@ -17,39 +16,32 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/store/admin/coupon", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/store/coupon", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class CouponController {
 
     private final CouponService couponService;
-
+    
     /* todo :
-        1. 쿠폰 생성 v
-        2. 매장별 쿠폰 목록 조회 v
-        3. 쿠폰 내용 상세 조회(?)
-        4. 쿠폰 삭제 v
+        1. 쿠폰 등록
+        2. 개인별 쿠폰 목록 조회
+        3. 쿠폰 사용
      */
 
-     // 쿠폰 생성
-     @RequestMapping("/create")
-     public ApiResponseDto<String> couponCreate(@RequestBody CouponCreateDto couponCreateDto) {
-        couponService.createCoupon(couponCreateDto);
+     // 쿠폰 등록
+     @RequestMapping("/{couponId}/register")
+     public ApiResponseDto<String> couponRegister(@PathVariable Long couponId) {
+        Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        couponService.registerCoupon(userId, couponId);
         return ApiResponseDto.defaultOk();
      }
 
-     // 매장별 쿠폰 목록 조회
-    // coupon 조회시 enddate가 지났을때 Expired로 상태 변경후 리턴
-     @GetMapping("/list")
-     public ApiResponseDto<List<Coupon>> couponList(@RequestParam Long storeId) {
-        List<Coupon> list = couponService.getCouponList(storeId);
+     // 개인별 쿠폰 목록 조회
+     @PostMapping("/myCoupons")
+     public ApiResponseDto<List<Coupon>> getMyCouponList() {
+        Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        List<Coupon> list = couponService.getMyCouponList(userId);
         return ApiResponseDto.readOk(list);
-     }
-
-     // 쿠폰 삭제
-     @DeleteMapping("/delete/{couponId}")
-     public ApiResponseDto<String> couponDelete(@PathVariable Long couponId) {
-        couponService.deleteCoupon(couponId);
-        return ApiResponseDto.defaultOk();
      }
 
 }

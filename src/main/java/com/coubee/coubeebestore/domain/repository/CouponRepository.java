@@ -8,4 +8,5 @@ import com.coubee.coubeebestore.domain.Coupon;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long>{
     List<Coupon> findAllByStore_StoreId(Long storeId);
+    List<Coupon> findAllById(Long userId);
 }
