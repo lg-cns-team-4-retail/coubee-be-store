@@ -114,13 +114,9 @@ public class Store extends BaseTimeEntity{
     }
 
     public void updateStore(StoreUpdateDto storeUpdateDto) {
-        this.storeName = storeUpdateDto.getStoreName();
         this.description = storeUpdateDto.getDescription();
         this.contactNo = storeUpdateDto.getContactNo();
-        this.storeAddress = storeUpdateDto.getStoreAddress();
         this.workingHour = storeUpdateDto.getWorkingHour();
-        this.latitude = storeUpdateDto.getLatitude();
-        this.longitude = storeUpdateDto.getLongitude();
         this.backImg = storeUpdateDto.getBackImg();
         this.profileImg = storeUpdateDto.getProfileImg();
     }

@@ -53,8 +53,12 @@ public class StoreMapper {
         dto.setStatus(store.getStatus());
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
-        List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
-        dto.setStoreTag(storeTag);
+        dto.setStoreTag(
+                store.getStoreCategories().stream()
+                        .map(StoreCategory::getCategory)
+                        .map(CategoryMapper::fromEntity)
+                        .toList()
+        );
         return dto;
     }
     public static StoreResponseDto fromEntity(Store store,double distance) {
@@ -74,9 +78,12 @@ public class StoreMapper {
         dto.setProfileImg(store.getProfileImg());
         dto.setLongitude(store.getLongitude());
         dto.setLatitude(store.getLatitude());
-        List<Category> storeTag = store.getStoreCategories().stream().map(StoreCategory::getCategory).toList();
-        dto.setStoreTag(storeTag);
-
+        dto.setStoreTag(
+                store.getStoreCategories().stream()
+                        .map(StoreCategory::getCategory)
+                        .map(CategoryMapper::fromEntity)
+                        .toList()
+        );
         return dto;
     }
 }

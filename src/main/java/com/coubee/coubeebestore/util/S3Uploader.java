@@ -9,7 +9,6 @@ import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -17,7 +16,7 @@ import java.util.UUID;
 
 @Slf4j
 @Component
-@Profile("prod")
+@Profile("stg")
 @RequiredArgsConstructor
 public class S3Uploader implements FileUploader{
 
@@ -38,12 +37,11 @@ public class S3Uploader implements FileUploader{
             PutObjectRequest request = PutObjectRequest.builder()
                     .bucket(bucket)
                     .key(fileName)
-                    .acl(ObjectCannedACL.PUBLIC_READ)
                     .contentType(multipartFile.getContentType())
                     .build();
 
             s3Client.putObject(request, RequestBody.fromBytes(multipartFile.getBytes()));
-            return getUrl(fileName);
+            return "/"+fileName;
 
         } catch (IOException e) {
             throw new RuntimeException("S3 파일 업로드 실패", e);
@@ -73,8 +71,8 @@ public class S3Uploader implements FileUploader{
     @Value("${cloud.aws.cloudfront.domain}")  // 예: cdn.example.com
     private String cloudFrontDomain;
 
-    private String getUrl(String key) {
-        return "https://" + cloudFrontDomain + "/" + key;
+    private String getUrl(String path) {
+        return "https://" + cloudFrontDomain + path;
     }
     /**
      * S3 URL에서 key 추출
