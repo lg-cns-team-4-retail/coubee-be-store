@@ -19,8 +19,10 @@ import com.coubee.coubeebestore.domain.repository.StoreRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class CouponService {
     
@@ -78,8 +80,9 @@ public class CouponService {
 
     // 일반 사용자 기능
     // 1. 쿠폰 등록
-    public void registerCoupon(Long userId, Long couponId) {
-        Coupon coupon = couponRepository.findById(couponId)
+    @Transactional
+    public void IssueAndRegisterCoupon(Long userId, Long couponId) {
+        Coupon coupon = couponRepository.findByCouponId(couponId)
             .orElseThrow(() -> new NotFound("해당 쿠폰을 찾을 수 없습니다."));
         CouponRedemption couponRedemption = CouponRedemption.builder()
             .store(coupon.getStore())
@@ -89,6 +92,7 @@ public class CouponService {
             .build();
         couponRedemptionRepository.save(couponRedemption);
         // coupon.setAmount(coupon.getAmount()-1); // 발급 쿠폰량 -1
+        // couponRepository.save(coupon);
     }
 
     // 2. 내 쿠폰 조회

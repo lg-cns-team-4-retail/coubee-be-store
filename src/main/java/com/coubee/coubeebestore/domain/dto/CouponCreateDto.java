@@ -1,7 +1,5 @@
 package com.coubee.coubeebestore.domain.dto;
 
-import com.coubee.coubeebestore.domain.Store;
-
 import lombok.Data;
 
 import java.time.LocalDateTime;

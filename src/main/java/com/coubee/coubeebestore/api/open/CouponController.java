@@ -23,16 +23,16 @@ public class CouponController {
     private final CouponService couponService;
     
     /* todo :
-        1. 쿠폰 등록
+        1. 쿠폰 발급 및 등록
         2. 개인별 쿠폰 목록 조회
         3. 쿠폰 사용
      */
 
-     // 쿠폰 등록
+     // 쿠폰 발급 및 등록
      @RequestMapping("/{couponId}/register")
-     public ApiResponseDto<String> couponRegister(@PathVariable Long couponId) {
+     public ApiResponseDto<String> couponIssueAndRegister(@PathVariable Long couponId) {
         Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
-        couponService.registerCoupon(userId, couponId);
+        couponService.IssueAndRegisterCoupon(userId, couponId);
         return ApiResponseDto.defaultOk();
      }
 
@@ -42,6 +42,13 @@ public class CouponController {
         Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
         List<Coupon> list = couponService.getMyCouponList(userId);
         return ApiResponseDto.readOk(list);
+     }
+
+     // 쿠폰 사용
+     @PostMapping("/{couponId}")
+     public ApiResponseDto<String> useCoupon(@PathVariable Long couponId) {
+         couponService.useCoupon(couponId);
+         return ApiResponseDto.defaultOk();
      }
 
 }

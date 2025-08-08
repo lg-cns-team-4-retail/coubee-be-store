@@ -55,7 +55,7 @@ public class CouponAdminController {
      // 쿠폰 상세 조회
      @GetMapping("/list/{couponId}")
      public ApiResponseDto<CouponResponseDto> couponView(@PathVariable Long couponId, @RequestBody CouponResponseDto couponResponseDto) {
-         CouponResponseDto coupon = couponService.viewCoupon(couponId, couponResponseDto);
+         CouponResponseDto coupon = couponService.viewCoupon(couponId);
          return ApiResponseDto.readOk(coupon);
      }
 

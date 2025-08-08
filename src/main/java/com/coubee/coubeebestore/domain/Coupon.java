@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "coupon")
@@ -36,6 +38,9 @@ public class Coupon extends BaseTimeEntity{
     @Enumerated(EnumType.STRING)
     @Setter
     private CouponStatus status;
+
+    @OneToMany(mappedBy = "coupon")
+    private final List<CouponRedemption> couponRedemptions = new ArrayList<>();
 
     @Builder
     public Coupon(

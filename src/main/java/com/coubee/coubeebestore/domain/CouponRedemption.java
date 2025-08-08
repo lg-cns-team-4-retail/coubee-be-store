@@ -68,9 +68,22 @@ public class CouponRedemption {
     }
 
     public void use() {
-        if(!coupon.isExpired()) {
+        this.validate();
         coupon.setStatus(CouponStatus.INACTIVE);
         this.usedAt = LocalDateTime.now();
+    }
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(coupon.getEndDate());
+    }
+
+    public void validate() {
+        if(isExpired()){
+            throw new IllegalArgumentException("사용이 만료된 쿠폰입니다.");
+        }
+
+        if(coupon.getStatus() != CouponStatus.ACTIVE) {
+            throw new IllegalArgumentException("사용할 수 없는 쿠폰입니다.");
         }
     }
 
