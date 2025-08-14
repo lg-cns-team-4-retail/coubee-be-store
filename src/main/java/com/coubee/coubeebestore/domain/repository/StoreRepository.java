@@ -33,8 +33,16 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     """)
     List<Store> findNearbyStoresOrderByDistance(@Param("lat") double lat, @Param("lng") double lng, @Param("maxDistance") double maxDistance);
 
-    List<Store> findAllByStoreNameContainingIgnoreCase(String storeName);
-    List<Store> findAllByStoreNameContainingIgnoreCaseAndStatus(String storeName,StoreStatus status);
+    @Query("""
+      SELECT DISTINCT s
+      FROM Store s
+      LEFT JOIN FETCH s.storeCategories sc
+      LEFT JOIN FETCH sc.category c
+      WHERE UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
+        AND (:status IS NULL OR s.status = :status)
+    """)
+    List<Store> findByKeywordAndOptionalStatusWithGraph(@Param("keyword") String keyword,
+                                                        @Param("status") StoreStatus status);
 
     List<Store> findAllByStoreIdIn(List<Long> storeIds);
 
