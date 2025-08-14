@@ -47,7 +47,7 @@ public class StoreSuAdminController {
     }
     // 매장 전체 조회(페이징처리)
     @GetMapping("/list")
-    public ApiResponseDto<List<StoreDto>> getStoreList(@RequestParam String keyword, @RequestParam String status) {
+    public ApiResponseDto<List<StoreDto>> getStoreList(@RequestParam(defaultValue = "") String keyword, @RequestParam StoreStatus status) {
         List<StoreDto> list = storeService.getStoreList(keyword,status);
         return ApiResponseDto.readOk(list);
     }

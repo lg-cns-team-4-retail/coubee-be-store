@@ -152,8 +152,13 @@ public class StoreService {
     }
 
     // 매장 전체 조회 (page 처리)
-    public List<StoreDto> getStoreList(String keyword, String status) {
-        List<Store> stores = storeRepository.findAllByStoreNameContainingIgnoreCaseAndStatus(keyword,status);
+    public List<StoreDto> getStoreList(String keyword, StoreStatus status) {
+        List<Store> stores;
+        if (status == null) {
+            stores = storeRepository.findAllByStoreNameContainingIgnoreCase(keyword);
+        } else {
+            stores = storeRepository.findAllByStoreNameContainingIgnoreCaseAndStatus(keyword, status);
+        }
         return stores.stream().map(StoreMapper::fromEntity).collect(Collectors.toList());
     }
 
