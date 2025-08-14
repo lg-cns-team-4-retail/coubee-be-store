@@ -47,8 +47,8 @@ public class StoreSuAdminController {
     }
     // 매장 전체 조회(페이징처리)
     @GetMapping("/list")
-    public ApiResponseDto<Page<StoreDto>> getStoreList(@PageableDefault(size = 10,page = 0,sort = "createAt",direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<StoreDto> list = storeService.getStoreList(pageable);
+    public ApiResponseDto<List<StoreDto>> getStoreList(@RequestParam String keyword, @RequestParam String status) {
+        List<StoreDto> list = storeService.getStoreList(keyword,status);
         return ApiResponseDto.readOk(list);
     }
     // 매장 삭제

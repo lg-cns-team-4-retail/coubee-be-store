@@ -33,6 +33,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     """)
     List<Store> findNearbyStoresOrderByDistance(@Param("lat") double lat, @Param("lng") double lng, @Param("maxDistance") double maxDistance);
 
+    List<Store> findAllByStoreNameContainingIgnoreCaseAndStatus(String storeName,String status);
 
     List<Store> findAllByStoreIdIn(List<Long> storeIds);
 
