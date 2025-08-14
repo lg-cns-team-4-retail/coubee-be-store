@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,8 +48,10 @@ public class StoreSuAdminController {
     }
     // 매장 전체 조회(페이징처리)
     @GetMapping("/list")
-    public ApiResponseDto<Page<StoreDto>> getStoreList(@PageableDefault(size = 10,page = 0,sort = "createAt",direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<StoreDto> list = storeService.getStoreList(pageable);
+    public ApiResponseDto<List<StoreDto>> getStoreList(@RequestParam(defaultValue = "") String keyword,
+                                                       @RequestParam(required = false) String status) {
+        StoreStatus parsed = (StringUtils.hasText(status) ? StoreStatus.valueOf(status.toUpperCase()) : null);
+        List<StoreDto> list = storeService.getStoreList(keyword,parsed);
         return ApiResponseDto.readOk(list);
     }
     // 매장 삭제

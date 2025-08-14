@@ -152,9 +152,14 @@ public class StoreService {
     }
 
     // 매장 전체 조회 (page 처리)
-    public Page<StoreDto> getStoreList(Pageable pageable) {
-        Page<Store> stores = storeRepository.findAll(pageable);
-        return stores.map(StoreMapper::fromEntity);
+    public List<StoreDto> getStoreList(String keyword, StoreStatus status) {
+        List<Store> stores;
+        if (status == null) {
+            stores = storeRepository.findAllByStoreNameContainingIgnoreCase(keyword);
+        } else {
+            stores = storeRepository.findAllByStoreNameContainingIgnoreCaseAndStatus(keyword, status);
+        }
+        return stores.stream().map(StoreMapper::fromEntity).collect(Collectors.toList());
     }
 
     // 매장 삭제
