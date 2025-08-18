@@ -82,8 +82,21 @@ public class CouponService {
     // 1. 쿠폰 등록
     @Transactional
     public void IssueAndRegisterCoupon(Long userId, Long couponId) {
+        
+        // 1) 비관적 락 적용
         Coupon coupon = couponRepository.findByCouponId(couponId)
             .orElseThrow(() -> new NotFound("해당 쿠폰을 찾을 수 없습니다."));
+           // 2) 수량 체크
+        // if (coupon.getAmount() <= 0) {
+        //     throw new IllegalStateException("쿠폰 재고가 없습니다.");
+        // }
+
+        // 3) 이미 발급받았는지 확인 (중복 방지)
+        boolean alreadyIssued = couponRedemptionRepository.existsByCoupon_CouponIdAndUserId(couponId, userId);
+        if (alreadyIssued) {
+            throw new IllegalStateException("이미 발급받은 쿠폰입니다.");
+        }
+
         CouponRedemption couponRedemption = CouponRedemption.builder()
             .store(coupon.getStore())
             .coupon(coupon)

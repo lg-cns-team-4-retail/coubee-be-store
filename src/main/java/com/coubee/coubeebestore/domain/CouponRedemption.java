@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -69,7 +68,7 @@ public class CouponRedemption {
 
     public void use() {
         this.validate();
-        coupon.setStatus(CouponStatus.INACTIVE);
+        coupon.setStatus(CouponStatus.USED);
         this.usedAt = LocalDateTime.now();
     }
 
@@ -82,8 +81,12 @@ public class CouponRedemption {
             throw new IllegalArgumentException("사용이 만료된 쿠폰입니다.");
         }
 
-        if(coupon.getStatus() != CouponStatus.ACTIVE) {
+        if(coupon.getStatus() == CouponStatus.INACTIVE) {
             throw new IllegalArgumentException("사용할 수 없는 쿠폰입니다.");
+        }
+
+        if(coupon.getStatus() == CouponStatus.USED) {
+            throw new IllegalArgumentException("이미 사용된 쿠폰입니다.");
         }
     }
 
@@ -93,6 +96,7 @@ public class CouponRedemption {
     //         this.store = coupon.getStore();
     //         this.userId = userId;
     //         this.redemptAt = LocalDateTime.now();
+    //         coupon.setAmount(coupon.getAmount() - 1);
     //     }
     // }
 }

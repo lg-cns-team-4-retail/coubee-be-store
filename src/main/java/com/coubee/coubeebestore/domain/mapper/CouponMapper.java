@@ -14,4 +14,5 @@ public class CouponMapper {
         CouponResponseDto dto = new CouponResponseDto();
         return dto; 
     }
+
 }
