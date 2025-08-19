@@ -16,7 +16,6 @@ import jakarta.persistence.QueryHint;
 
 public interface CouponRepository extends JpaRepository<Coupon, Long>{
     List<Coupon> findAllByStore_StoreId(Long storeId);
-    List<Coupon> findAllById(Long userId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select c from Stock c where c.id = :couponId")
