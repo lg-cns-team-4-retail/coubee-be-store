@@ -59,12 +59,6 @@ public class Store extends BaseTimeEntity{
     @Setter
     private String profileImg;
 
-    @Setter
-    private int openingTime;
-
-    @Setter
-    private int closingTime;
-
     @Enumerated(EnumType.STRING)
     @Setter
     private StoreStatus status;
