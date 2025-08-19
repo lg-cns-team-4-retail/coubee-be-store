@@ -13,4 +13,5 @@ public interface CouponRedemptionRepository extends JpaRepository<Coupon, Long>{
     List<CouponRedemption> findByUserId(Long userId);
     Optional<CouponRedemption> findByCouponId(Long couponId);
     CouponRedemption save(CouponRedemption couponRedemption);
+    boolean existsByCoupon_CouponIdAndUserId(Long userId, Long couponId);
 }
