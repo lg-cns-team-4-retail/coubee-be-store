@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
-import com.coubee.coubeebestore.domain.repository.StoreRepository;
 import com.coubee.coubeebestore.service.BackendStoreService;
 
 import java.util.List;
