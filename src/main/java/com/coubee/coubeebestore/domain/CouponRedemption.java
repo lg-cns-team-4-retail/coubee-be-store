@@ -2,8 +2,6 @@ package com.coubee.coubeebestore.domain;
 
 import java.time.LocalDateTime;
 
-import com.netflix.infix.lang.infix.antlr.EventFilterParser.path_function_return;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
