@@ -28,6 +28,7 @@ public class StoreDto {
     private StoreStatus status;
     private LocalDateTime approvedAt;
     private String rejectReason;
+    private LocalDateTime createdAt;
 //    private String storeTag;
 
     private List<CategoryDto> storeTag;

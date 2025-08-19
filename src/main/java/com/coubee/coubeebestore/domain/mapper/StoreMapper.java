@@ -53,6 +53,7 @@ public class StoreMapper {
         dto.setStatus(store.getStatus());
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
+        dto.setCreatedAt(store.getCreatedAt());
         dto.setStoreTag(
                 store.getStoreCategories().stream()
                         .map(StoreCategory::getCategory)
