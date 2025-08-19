@@ -1,13 +1,11 @@
 package com.coubee.coubeebestore.domain.dto;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
+import lombok.Data;
+
 @Data
-public class CouponCreateDto {
-    private Long storeId;
-    
+public class CouponResponseDto {
     private String title;
     private String content;
     private float discountRate;
@@ -16,4 +14,7 @@ public class CouponCreateDto {
 
     private LocalDateTime startDate;
     private LocalDateTime endDate;
+
+    private String storeName;
+    
 }
