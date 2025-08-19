@@ -1,6 +1,5 @@
 package com.coubee.coubeebestore.domain.mapper;
 
-import com.coubee.coubeebestore.domain.Category;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreCategory;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
@@ -10,8 +9,6 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
-
-import java.util.List;
 
 public class StoreMapper {
 
