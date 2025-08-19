@@ -3,6 +3,7 @@ package com.coubee.coubeebestore.domain.dto;
 import com.coubee.coubeebestore.domain.Category;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,6 +29,7 @@ public class StoreDto {
     private StoreStatus status;
     private LocalDateTime approvedAt;
     private String rejectReason;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 //    private String storeTag;
 

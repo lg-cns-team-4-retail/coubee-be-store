@@ -40,6 +40,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
       LEFT JOIN FETCH sc.category c
       WHERE UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
         AND (:status IS NULL OR s.status = :status)
+        ORDER BY s.createdAt desc
     """)
     List<Store> findByKeywordAndOptionalStatusWithGraph(@Param("keyword") String keyword,
                                                         @Param("status") StoreStatus status);
