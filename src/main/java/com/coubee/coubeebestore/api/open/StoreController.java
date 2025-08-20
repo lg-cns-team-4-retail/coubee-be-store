@@ -42,9 +42,9 @@ public class StoreController {
 
     // 나의 관심 매장 조회
     @GetMapping("/interest/my")
-    public ApiResponseDto<?> getMyInterestStores(){
+    public ApiResponseDto<List<StoreResponseDto>> getMyInterestStores(){
         Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
-        List<Store> stores = storeService.getMyInterestStores(userId);
+        List<StoreResponseDto> stores = storeService.getMyInterestStores(userId);
         return ApiResponseDto.readOk(stores);
     }
 
