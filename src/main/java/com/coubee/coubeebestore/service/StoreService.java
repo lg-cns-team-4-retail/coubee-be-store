@@ -194,10 +194,13 @@ public class StoreService {
     }
 
     // 관심 매장 목록 조회
-    public List<Store> getMyInterestStores(Long userId) {
+    public List<StoreResponseDto> getMyInterestStores(Long userId) {
         List<InterestStore> interestList = interestStoreRepository.findByUserId(userId);
         List<Long> storeIds = interestList.stream().map(InterestStore::getStoreId).toList();
-        return storeRepository.findAllById(storeIds);
+        List<Store> stores = storeRepository.findAllByStoreIdIn(storeIds);
+        return stores.stream()
+                .map(StoreMapper::fromEntityForUser)
+                .collect(Collectors.toList());
     }
 
     // 매장 상세 조회

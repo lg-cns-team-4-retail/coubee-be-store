@@ -29,6 +29,7 @@ public class StoreMapper {
                 .bizNo(dto.getBizNo())
                 .backImg(dto.getBackImg())
                 .profileImg(dto.getProfileImg())
+                .bizImg(dto.getBizImg())
                 .build();
     }
 
@@ -47,6 +48,7 @@ public class StoreMapper {
         dto.setBizNo(store.getBizNo());
         dto.setBackImg(store.getBackImg());
         dto.setProfileImg(store.getProfileImg());
+        dto.setBizImg(store.getBizImg());
         dto.setStatus(store.getStatus());
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
@@ -59,7 +61,7 @@ public class StoreMapper {
         );
         return dto;
     }
-    public static StoreResponseDto fromEntity(Store store,double distance) {
+    public static StoreResponseDto fromEntity(Store store, double distance) {
         StoreResponseDto dto = fromEntityForUser(store);
         dto.setDistance(distance);
         return dto;

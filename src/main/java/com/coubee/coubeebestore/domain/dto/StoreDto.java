@@ -26,6 +26,7 @@ public class StoreDto {
     private String bizNo;
     private String backImg;
     private String profileImg;
+    private String bizImg;
     private StoreStatus status;
     private LocalDateTime approvedAt;
     private String rejectReason;

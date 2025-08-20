@@ -111,8 +111,11 @@ public class CouponService {
     // 2. 내 쿠폰 조회
     public List<Coupon> getMyCouponList(Long userId) {
         List<CouponRedemption> couponList = couponRedemptionRepository.findByUserId(userId);
-        List<Long> couponIds = couponList.stream().map(CouponRedemption::getCouponId).toList();
-        return couponRepository.findAllById(couponIds);
+        List<Long> couponIds = couponList
+                    .stream()
+                    .map(CouponRedemption::getCouponId)
+                    .toList();
+        return couponRepository.findAllByCouponIdIn(couponIds);
     }
 
     // 3. 쿠폰 사용

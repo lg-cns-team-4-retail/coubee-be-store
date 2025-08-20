@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.QueryHints;
 
 import com.coubee.coubeebestore.domain.Coupon;
+import com.coubee.coubeebestore.domain.Store;
 
 import feign.Param;
 import jakarta.persistence.LockModeType;
@@ -21,4 +22,6 @@ public interface CouponRepository extends JpaRepository<Coupon, Long>{
     @Query("select c from Stock c where c.id = :couponId")
     @QueryHints({ @QueryHint(name = "javax.persistence.lock.timeout", value = "3000") })
     Optional<Coupon> findByCouponId(@Param("couponId") Long couponId);
+    
+    List<Coupon> findAllByCouponIdIn(List<Long> couponIds);
 }
