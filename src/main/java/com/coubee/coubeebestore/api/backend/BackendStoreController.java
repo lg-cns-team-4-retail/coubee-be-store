@@ -15,6 +15,8 @@ import org.springframework.http.MediaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/backend/store", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,7 +26,7 @@ public class BackendStoreController {
 
     @GetMapping(value = "/hello")
     public ApiResponseDto<String> hello() {
-        return ApiResponseDto.createOk("feingClient 성공");
+        return ApiResponseDto.createOk("feignClient 성공");
     }
 
     @GetMapping(value = "/near")

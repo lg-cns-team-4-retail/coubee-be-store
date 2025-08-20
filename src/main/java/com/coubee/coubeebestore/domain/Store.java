@@ -7,9 +7,7 @@ import lombok.*;
 import org.locationtech.jts.geom.Point;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "store")
@@ -59,6 +57,10 @@ public class Store extends BaseTimeEntity{
     @Setter
     private String profileImg;
 
+    @Column(columnDefinition = "text")
+    @Setter
+    private String bizImg;
+
     @Enumerated(EnumType.STRING)
     @Setter
     private StoreStatus status;
@@ -86,6 +88,7 @@ public class Store extends BaseTimeEntity{
             String bizNo,
             String backImg,
             String profileImg,
+            String bizImg,
             Point location,
             LocalDateTime approvedAt,
             String rejectReason
@@ -102,6 +105,7 @@ public class Store extends BaseTimeEntity{
         this.bizNo = bizNo;
         this.backImg = backImg;
         this.profileImg = profileImg;
+        this.bizImg = bizImg;
         this.status = StoreStatus.PENDING;
         this.approvedAt = approvedAt;
         this.rejectReason = rejectReason;

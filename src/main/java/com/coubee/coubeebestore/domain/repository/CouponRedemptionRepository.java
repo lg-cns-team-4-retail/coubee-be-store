@@ -5,11 +5,9 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.coubee.coubeebestore.domain.Coupon;
 import com.coubee.coubeebestore.domain.CouponRedemption;
 
 public interface CouponRedemptionRepository extends JpaRepository<CouponRedemption, Long>{
-
     List<CouponRedemption> findByUserId(Long userId);
     Optional<CouponRedemption> findByCouponId(Long couponId);
     boolean existsByCoupon_CouponIdAndUserId(Long userId, Long couponId);
