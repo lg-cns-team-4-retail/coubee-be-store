@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coubee-be-store-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: coubee-be-store
+  template:
+    metadata:
+      labels:
+        app: coubee-be-store
+    spec:
+      containers:
+        - name: coubee-be-store
+          image: 310095858382.dkr.ecr.ap-northeast-2.amazonaws.com/coubee-be-store:0.0.1
+          imagePullPolicy: Always
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: stg
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - mountPath: /etc/config
+              name: api-store-config-volume
+            - mountPath: /etc/secret
+              name: api-store-secret-volume
+      volumes:
+        - name: api-store-config-volume
+          configMap:
+            name: api-store-config
+            items:
+              - key: application-stg.yml
+                path: application-stg.yml
+        - name: api-store-secret-volume
+          secret:
+            secretName: api-store-secret
+            items:
+              - key: application-secret.yml
+                path: application-secret.yml
