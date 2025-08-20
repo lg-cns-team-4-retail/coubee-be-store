@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: api-store-config
+  name: be-store-config
 data:
   application-stg.yml: |
     server:
