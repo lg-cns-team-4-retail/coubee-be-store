@@ -1,7 +1,5 @@
 package com.coubee.coubeebestore.domain.dto;
 
-import com.coubee.coubeebestore.domain.Category;
-import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -28,6 +26,7 @@ public class StoreDto {
     private String profileImg;
     private String bizImg;
     private StoreStatus status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime approvedAt;
     private String rejectReason;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
