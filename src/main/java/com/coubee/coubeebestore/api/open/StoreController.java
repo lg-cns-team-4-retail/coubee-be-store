@@ -44,7 +44,7 @@ public class StoreController {
     @GetMapping("/interest/my")
     public ApiResponseDto<?> getMyInterestStores(){
         Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
-        List<Store> stores = storeService.getMyInterestStores(userId);
+        List<StoreResponseDto> stores = storeService.getMyInterestStores(userId);
         return ApiResponseDto.readOk(stores);
     }
 

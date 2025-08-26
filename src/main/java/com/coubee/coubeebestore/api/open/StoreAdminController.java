@@ -5,6 +5,7 @@ import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRegisterDto;
 import com.coubee.coubeebestore.domain.dto.StoreUpdateDto;
+import com.coubee.coubeebestore.service.HotdealService;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
