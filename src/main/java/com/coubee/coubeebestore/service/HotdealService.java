@@ -46,6 +46,7 @@ public class HotdealService {
                     .store(store)
                     .saleRate(dto.getSaleRate())
                     .maxDiscount(dto.getMaxDiscount())
+                    .hotdealStatus(HotdealStatus.ACTIVE)
                     .build();
 
         hotdealRepository.save(hotdeal);
