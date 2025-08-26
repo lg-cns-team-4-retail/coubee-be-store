@@ -2,8 +2,6 @@ package com.coubee.coubeebestore.api.open;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
 import com.coubee.coubeebestore.common.web.context.GatewayRequestHeaderUtils;
-import com.coubee.coubeebestore.domain.Store;
-import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +25,8 @@ public class StoreController {
 
     // 매장 목록 조회(위치기반)
     @GetMapping("/near")
-    public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng) {
-        List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng);
+    public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "") String keyword) {
+        List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
         return ApiResponseDto.readOk(storeList);
     }
 

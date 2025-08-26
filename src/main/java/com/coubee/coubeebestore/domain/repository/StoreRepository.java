@@ -22,7 +22,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
         LEFT JOIN FETCH s.storeCategories sc
         LEFT JOIN FETCH sc.category c
         WHERE s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
-        AND UPPER(c.name) LIKE UPPER(CONCAT('%', :keyword, '%'))
+        AND UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
         AND function('ST_DistanceSphere',
             function('ST_MakePoint', :lng, :lat),
             function('ST_MakePoint', s.longitude, s.latitude)

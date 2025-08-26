@@ -74,9 +74,6 @@ public class Store extends BaseTimeEntity{
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreCategory> storeCategories = new ArrayList<>();
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Hotdeal> hotdeals = new ArrayList<>();
-
 
     @Builder
     public Store(

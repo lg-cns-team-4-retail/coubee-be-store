@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.service;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import org.springframework.stereotype.Service;
@@ -27,15 +28,18 @@ public class HotdealService {
 
     @Transactional
     public void onHotdeal(Long adminId, HotdealDto dto) {
-        Store store = storeRepository.findById(dto.getStore().getStoreId())
+        Store store = storeRepository.findById(dto.getStoreId())
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         if (!Objects.equals(store.getOwnerId(), adminId)) {
             throw new BadParameter("소유매장만 적용 가능");
         }
 
         // 기존에 켜져 있는 핫딜이 있으면 먼저 끈다
-        hotdealRepository.findByStoreIdAndStatusOn(store.getStoreId())
-                .ifPresent(h -> h.setHotdealStatus(HotdealStatus.OFF));
+        hotdealRepository.findByStore_StoreIdAndHotdealStatus(store.getStoreId(), HotdealStatus.ACTIVE)
+                .ifPresent(h -> {
+                    h.setHotdealStatus(HotdealStatus.INACTIVE);
+                    h.setDeletedAt(LocalDateTime.now());
+                });
 
         // 새로운 핫딜 생성
         Hotdeal hotdeal = Hotdeal.builder()
@@ -45,22 +49,19 @@ public class HotdealService {
                     .build();
 
         hotdealRepository.save(hotdeal);
-        hotdealRepository.flush();
     }
 
     @Transactional
-    public void offHotdeal(Long adminId, HotdealDto dto) {
-        Store store = storeRepository.findById(dto.getStore().getStoreId())
+    public void offHotdeal(Long adminId, Long storeId) {
+        Store store = storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
         if (!Objects.equals(store.getOwnerId(), adminId)) {
             throw new BadParameter("소유매장만 적용 가능");
         }
 
-        Hotdeal hotdeal = hotdealRepository.findByStoreId(store.getStoreId())
+        Hotdeal hotdeal = hotdealRepository.findByStore_StoreIdAndHotdealStatus(store.getStoreId(), HotdealStatus.ACTIVE)
                 .orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
-        hotdeal.setHotdealStatus(HotdealStatus.OFF);
-
-        hotdealRepository.save(hotdeal);
-        hotdealRepository.flush();
+        hotdeal.setHotdealStatus(HotdealStatus.INACTIVE);
+        hotdeal.setDeletedAt(LocalDateTime.now());
     }
 }

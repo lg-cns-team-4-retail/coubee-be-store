@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 
@@ -34,7 +33,7 @@ public class BackendStoreController {
     }
 
     @GetMapping(value = "/near")
-    public ApiResponseDto<List<Long>> getNearStoreIds(@RequestParam double latitude, @RequestParam double longitude, @RequestParam String keyword) {
+    public ApiResponseDto<List<Long>> getNearStoreIds(@RequestParam double latitude, @RequestParam double longitude, @RequestParam(required = false, defaultValue = "") String keyword) {
         return ApiResponseDto.createOk(backendStoreService.getNearStoreIds(latitude, longitude, keyword));
     }
 

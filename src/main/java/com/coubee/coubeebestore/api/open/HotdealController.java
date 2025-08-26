@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
@@ -25,8 +24,8 @@ public class HotdealController {
     private final HotdealService hotdealService;
 
     // 매장 핫딜 켜기
-    @PostMapping("/on/{storeId}")
-    public ApiResponseDto<String> onHotdeal(@PathVariable Long storeId, @RequestBody HotdealDto hotdealDto) {
+    @PostMapping("/on")
+    public ApiResponseDto<String> onHotdeal(@RequestBody HotdealDto hotdealDto) {
         Long adminId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
         hotdealService.onHotdeal(adminId, hotdealDto);
         return ApiResponseDto.defaultOk();
@@ -35,7 +34,8 @@ public class HotdealController {
     // 매장 핫딜 끄기
     @PostMapping("/off/{storeId}")
     public ApiResponseDto<String> offHotdeal(@PathVariable Long storeId) {
-        
+        Long adminId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+        hotdealService.offHotdeal(adminId, storeId);
         return ApiResponseDto.defaultOk();
     }
 }
