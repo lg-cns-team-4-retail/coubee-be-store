@@ -43,11 +43,11 @@ public class HotdealService {
 
         // 새로운 핫딜 생성
         Hotdeal hotdeal = Hotdeal.builder()
-                    .store(store)
-                    .saleRate(dto.getSaleRate())
-                    .maxDiscount(dto.getMaxDiscount())
-                    .hotdealStatus(HotdealStatus.ACTIVE)
-                    .build();
+                .store(store)
+                .saleRate(dto.getSaleRate())
+                .maxDiscount(dto.getMaxDiscount())
+                .hotdealStatus(HotdealStatus.ACTIVE)
+                .build();
 
         hotdealRepository.save(hotdeal);
     }
