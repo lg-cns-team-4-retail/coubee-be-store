@@ -37,8 +37,8 @@ public class BackendStoreController {
         return ApiResponseDto.createOk(backendStoreService.getNearStoreIds(latitude, longitude, keyword));
     }
 
-    @PostMapping("/validate")
-    public ApiResponseDto<?> validStoreId(@RequestParam Long storeId) {
+    @GetMapping("/validate")
+    public ApiResponseDto<Boolean> validStoreId(@RequestParam Long storeId) {
         return ApiResponseDto.readOk(backendStoreService.validStoreId(storeId));
     }
 }
