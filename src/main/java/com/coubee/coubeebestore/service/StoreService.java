@@ -167,8 +167,8 @@ public class StoreService {
 
     // 일반 사용자 기능
     // 근처 매장 조회
-    public List<StoreResponseDto> getNearStoreList(Double latitude, Double longitude) {
-        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500)
+    public List<StoreResponseDto> getNearStoreList(Double latitude, Double longitude, String keyword) {
+        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
                 .stream()
                 .map(store -> {
                     double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
@@ -215,6 +215,4 @@ public class StoreService {
         }
         return StoreMapper.fromEntityForUser(store);
     }
-
-
 }

@@ -1,6 +1,7 @@
 package com.coubee.coubeebestore.api.backend;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,8 @@ import org.springframework.http.MediaType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 
 
@@ -30,7 +33,12 @@ public class BackendStoreController {
     }
 
     @GetMapping(value = "/near")
-    public ApiResponseDto<List<Long>> getNearStoreIds(@RequestParam double latitude, @RequestParam double longitude) {
-        return ApiResponseDto.createOk(backendStoreService.getNearStoreIds(latitude, longitude));
+    public ApiResponseDto<List<Long>> getNearStoreIds(@RequestParam double latitude, @RequestParam double longitude, @RequestParam(required = false, defaultValue = "") String keyword) {
+        return ApiResponseDto.createOk(backendStoreService.getNearStoreIds(latitude, longitude, keyword));
+    }
+
+    @PostMapping("/validate/{storeId}")
+    public ApiResponseDto<?> validStoreId(@PathVariable Long storeId) {
+        return ApiResponseDto.readOk(backendStoreService.validStoreId(storeId));
     }
 }

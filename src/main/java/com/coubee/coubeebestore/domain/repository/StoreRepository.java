@@ -20,18 +20,19 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query(value = """
         SELECT s FROM Store s
         LEFT JOIN FETCH s.storeCategories sc
-        LEFT JOIN FETCH sc.category
+        LEFT JOIN FETCH sc.category c
         WHERE s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
+        AND UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
         AND function('ST_DistanceSphere',
             function('ST_MakePoint', :lng, :lat),
             function('ST_MakePoint', s.longitude, s.latitude)
-        ) <= :maxDistance
+        ) <= :maxDistance 
         ORDER BY function('ST_DistanceSphere',
             function('ST_MakePoint', :lng, :lat),
             function('ST_MakePoint', s.longitude, s.latitude)
         )
     """)
-    List<Store> findNearbyStoresOrderByDistance(@Param("lat") double lat, @Param("lng") double lng, @Param("maxDistance") double maxDistance);
+    List<Store> findNearbyStoresOrderByDistance(@Param("lat") double lat, @Param("lng") double lng, @Param("maxDistance") double maxDistance, @Param("keyword") String keyword);
 
     @Query("""
       SELECT DISTINCT s
@@ -53,5 +54,4 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query("SELECT s FROM Store s JOIN FETCH s.storeCategories sc JOIN FETCH sc.category WHERE s.storeId = :id")
     Optional<Store> findStoreWithCategories(@Param("id") Long id);
-
 }

@@ -15,11 +15,18 @@ public class BackendStoreService {
 
     private final StoreRepository storeRepository;
 
-    public List<Long> getNearStoreIds(double latitude, double longitude) {
-        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500)
+    public List<Long> getNearStoreIds(double latitude, double longitude, String keyword) {
+        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
                 .stream()
                 .map(Store::getStoreId)
                 .toList();
+    }
+
+    public boolean validStoreId(Long storeId) {
+        if (storeId == null) {
+            return false;
+        }
+        return storeRepository.existsById(storeId);
     }
 }
 
