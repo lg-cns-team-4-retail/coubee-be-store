@@ -1,15 +1,9 @@
 package com.coubee.coubeebestore.domain.dto;
 
-import com.coubee.coubeebestore.domain.Category;
-import com.coubee.coubeebestore.domain.Store;
-
-import com.coubee.coubeebestore.domain.StoreStatus;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

@@ -1,24 +1,21 @@
 package com.coubee.coubeebestore.api.backend;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
+import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
 import com.coubee.coubeebestore.service.BackendStoreService;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-
-
-
 
 @Slf4j
 @RestController
@@ -40,5 +37,10 @@ public class BackendStoreController {
     @GetMapping("/validate")
     public ApiResponseDto<Boolean> validStoreId(@RequestParam Long storeId) {
         return ApiResponseDto.readOk(backendStoreService.validStoreId(storeId));
+    }
+
+    @GetMapping("/bulk")
+    public ApiResponseDto<Map<Long, StoreResponseDto>> getStoresByIds(@RequestParam List<Long> storeIds) {
+        return ApiResponseDto.readOk(backendStoreService.getStoresByIds(storeIds));
     }
 }
