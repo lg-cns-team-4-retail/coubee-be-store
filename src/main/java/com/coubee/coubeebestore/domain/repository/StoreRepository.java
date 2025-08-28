@@ -2,6 +2,7 @@ package com.coubee.coubeebestore.domain.repository;
 
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreStatus;
+import com.coubee.coubeebestore.domain.dto.HotdealResponseDto;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,15 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query("SELECT s FROM Store s LEFT JOIN FETCH s.storeCategories sc LEFT JOIN FETCH sc.category WHERE s.ownerId = :ownerId")
     List<Store> findAllByOwnerId(Long ownerId);
+
+    @Query(value = """
+    SELECT s FROM Store s 
+    LEFT JOIN FETCH s.storeCategories sc 
+    LEFT JOIN FETCH sc.category 
+    WHERE s.ownerId = :ownerId 
+    AND s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
+    """)
+    List<Long> findAllByOwnerIdOnApproved(Long ownerId);
 
     @Query(value = """
         SELECT s FROM Store s
@@ -46,11 +56,21 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     List<Store> findByKeywordAndOptionalStatusWithGraph(@Param("keyword") String keyword,
                                                         @Param("status") StoreStatus status);
 
+    @Query("""
+    SELECT DISTINCT s 
+    FROM Store s
+    LEFT JOIN FETCH s.storeCategories sc
+    LEFT JOIN FETCH sc.category
+    WHERE s.storeId IN :storeIds
+    """)                                                    
     List<Store> findAllByStoreIdIn(List<Long> storeIds);
 
     Page<Store> findAll(Pageable pageable);
 
     List<Store> findAllByStatus(StoreStatus status);
+
+    @Query("SELECT s.status FROM Store s WHERE s.storeId = :storeId")
+    StoreStatus findStatusByStoreId(@Param("storeId") Long storeId);
 
     @Query("SELECT s FROM Store s JOIN FETCH s.storeCategories sc JOIN FETCH sc.category WHERE s.storeId = :id")
     Optional<Store> findStoreWithCategories(@Param("id") Long id);

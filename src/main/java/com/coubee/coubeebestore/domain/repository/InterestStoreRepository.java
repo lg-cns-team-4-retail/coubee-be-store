@@ -12,4 +12,6 @@ public interface InterestStoreRepository extends JpaRepository<InterestStore, Lo
 
     List<InterestStore> findByUserId(Long userId);
 
+    boolean existsByUserIdAndStoreId(Long userId, Long storeId);
+
 }

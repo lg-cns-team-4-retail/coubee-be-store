@@ -34,13 +34,23 @@ public class BackendStoreController {
         return ApiResponseDto.createOk(backendStoreService.getNearStoreIds(latitude, longitude, keyword));
     }
 
-    @GetMapping("/validate")
+    @GetMapping(value = "/validate")
     public ApiResponseDto<Boolean> validStoreId(@RequestParam Long storeId) {
         return ApiResponseDto.readOk(backendStoreService.validStoreId(storeId));
     }
 
-    @GetMapping("/bulk")
+    @GetMapping(value = "/bulk")
     public ApiResponseDto<Map<Long, StoreResponseDto>> getStoresByIds(@RequestParam List<Long> storeIds) {
         return ApiResponseDto.readOk(backendStoreService.getStoresByIds(storeIds));
+    }
+    
+    @GetMapping(value = "/owner/{ownerId}/approved-stores")
+    public ApiResponseDto<List<Long>> getStoresByOwnerIdOnApproved(@RequestParam Long ownerId) {
+        return ApiResponseDto.readOk(backendStoreService.getStoresByOwnerIdOnApproved(ownerId));
+    }
+
+    @GetMapping(value = "/{storeId}/validate-status")
+    public ApiResponseDto<Boolean> validStatusByStoreId(@RequestParam Long storeId) {
+        return ApiResponseDto.readOk(backendStoreService.validStatusByStoreId(storeId));
     }
 }

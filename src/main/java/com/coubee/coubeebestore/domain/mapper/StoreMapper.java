@@ -102,4 +102,32 @@ public class StoreMapper {
         dto.setInterest(isInterest);
         return dto;
     }
+
+    public static StoreResponseDto fromEntityForUser(Store store) {
+        StoreResponseDto dto = new StoreResponseDto();
+        dto.setStoreId(store.getStoreId());
+        dto.setStoreName(store.getStoreName());
+        dto.setDescription(store.getDescription());
+        dto.setContactNo(store.getContactNo());
+        dto.setStoreAddress(store.getStoreAddress());
+        dto.setWorkingHour(store.getWorkingHour());
+        dto.setBackImg(store.getBackImg());
+        dto.setProfileImg(store.getProfileImg());
+        dto.setLongitude(store.getLongitude());
+        dto.setLatitude(store.getLatitude());
+        dto.setStoreTag(
+                store.getStoreCategories().stream()
+                        .map(StoreCategory::getCategory)
+                        .map(CategoryMapper::fromEntity)
+                        .toList()
+        );
+        dto.setHotdeal(
+            store.getHotdeals().stream()
+                .filter(h -> h.getHotdealStatus() == HotdealStatus.ACTIVE)
+                .findFirst()
+                .map(HotdealMapper::fromEntity)
+                .orElse(null)
+        );
+        return dto;
+    }
 }

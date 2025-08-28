@@ -23,4 +23,5 @@ public class StoreResponseDto {
     private double distance;
     private HotdealResponseDto hotdeal; // 핫딜
     private boolean interest; // 관심 매장 여부
+    private boolean fallback = false;
 }
