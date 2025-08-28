@@ -169,7 +169,7 @@ public class StoreService {
     // 일반 사용자 기능
     // 근처 매장 조회
     public List<StoreResponseDto> getNearStoreList(Double latitude, Double longitude, String keyword) {
-        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
+        return storeRepository.findNearbyStoresOrderByDistanceAndKeyword(latitude, longitude, 500, keyword)
                 .stream()
                 .map(store -> {
                     double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
@@ -180,7 +180,7 @@ public class StoreService {
 
     // 근처 매장 조회(로그인시)
     public List<StoreResponseDto> getNearStoreListforUser(Double latitude, Double longitude, Long userId, String keyword) {
-        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
+        return storeRepository.findNearbyStoresOrderByDistanceAndKeyword(latitude, longitude, 500, keyword)
                 .stream()
                 .map(store -> {
                     double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
@@ -208,7 +208,7 @@ public class StoreService {
 
     // 관심 매장 목록 조회
     public List<StoreResponseDto> getMyInterestStores(Long userId) {
-        List<InterestStore> interestList = interestStoreRepository.findByUserId(userId);
+        List<InterestStore> interestList = interestStoreRepository.findAllByUserId(userId);
         List<Long> storeIds = interestList.stream().map(InterestStore::getStoreId).toList();
         List<Store> stores = storeRepository.findAllByStoreIdIn(storeIds);
 
@@ -236,16 +236,20 @@ public class StoreService {
         return StoreMapper.fromEntityForUser(store, isInterest);
     }
 
-    // @Transactional(readOnly = true)
-    // public List<StoreResponseDto> getNearStoreListforUser(Double latitude, Double longitude, Long userId, String keyword) {
-    //     return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
-    //             .stream()
-    //             .map(store -> {
-    //                 double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
-    //                 boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(userId, store.getStoreId());
-    //                 return StoreMapper.fromEntity(store, isInterest, distance);
-    //             })
-    //             .toList();
-    // }
+    // 근처 매장 조회(관심 많은 순, 랜딩페이지용)
+    @Transactional(readOnly = true)
+    public List<StoreResponseDto> getNearStoreListforUserByInterest(Double latitude, Double longitude) {
+        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500)
+                .stream()
+                .map(store -> {
+                    double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
+                    boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(store.getOwnerId(), store.getStoreId());
+                    StoreResponseDto dto = StoreMapper.fromEntity(store, isInterest, distance);
+                    dto.setInterestCount(interestStoreRepository.findAllByStoreId(store.getStoreId()).size());
+                    return dto;
+                })
+                .sorted((a, b) -> Long.compare(b.getInterestCount(), a.getInterestCount()))
+                .toList();
+    }
 
 }

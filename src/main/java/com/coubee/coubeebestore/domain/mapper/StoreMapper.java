@@ -74,6 +74,7 @@ public class StoreMapper {
         dto.setDistance(distance);
         return dto;
     }
+
     public static StoreResponseDto fromEntityForUser(Store store, boolean isInterest) {
         StoreResponseDto dto = new StoreResponseDto();
         dto.setStoreId(store.getStoreId());
