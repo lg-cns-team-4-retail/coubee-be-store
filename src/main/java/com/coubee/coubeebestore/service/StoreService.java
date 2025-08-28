@@ -235,4 +235,17 @@ public class StoreService {
         boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(store.getOwnerId(), storeId);
         return StoreMapper.fromEntityForUser(store, isInterest);
     }
+
+    // @Transactional(readOnly = true)
+    // public List<StoreResponseDto> getNearStoreListforUser(Double latitude, Double longitude, Long userId, String keyword) {
+    //     return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
+    //             .stream()
+    //             .map(store -> {
+    //                 double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
+    //                 boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(userId, store.getStoreId());
+    //                 return StoreMapper.fromEntity(store, isInterest, distance);
+    //             })
+    //             .toList();
+    // }
+
 }

@@ -21,5 +21,5 @@ public interface HotdealRepository extends JpaRepository<Hotdeal, Long>{
     WHERE h.store.storeId = :storeId
     AND h.hotdealStatus = com.coubee.coubeebestore.domain.HotdealStatus.ACTIVE
     """)
-    Optional<HotdealResponseDto> findHotdealByStoreId(@Param("storeId") Long storeId);
+    Optional<Hotdeal> findHotdealByStoreId(@Param("storeId") Long storeId);
 }
