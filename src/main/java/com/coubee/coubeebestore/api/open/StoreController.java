@@ -26,8 +26,14 @@ public class StoreController {
     // 매장 목록 조회(위치기반)
     @GetMapping("/near")
     public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "") String keyword) {
-        List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
-        return ApiResponseDto.readOk(storeList);
+        if(GatewayRequestHeaderUtils.getUserId() != null) {
+            Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+            List<StoreResponseDto> storeList = storeService.getNearStoreListforUser(lat, lng, userId, keyword);
+            return ApiResponseDto.readOk(storeList);
+        } else {
+            List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
+            return ApiResponseDto.readOk(storeList);
+        }
     }
 
     // 관심 매장 등록

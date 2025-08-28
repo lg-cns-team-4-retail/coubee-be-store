@@ -21,4 +21,6 @@ public class StoreResponseDto {
 //    private String storeTag;  // 카테고리
     private List<CategoryDto> storeTag;
     private double distance;
+    private HotdealResponseDto hotdeal; // 핫딜
+    private boolean interest; // 관심 매장 여부
 }

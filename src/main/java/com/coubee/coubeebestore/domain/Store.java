@@ -74,6 +74,11 @@ public class Store extends BaseTimeEntity{
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoreCategory> storeCategories = new ArrayList<>();
 
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Hotdeal> hotdeals = new ArrayList<>();
+
+    @OneToMany(mappedBy = "storeId", fetch = FetchType.LAZY)
+    private List<InterestStore> interestStores = new ArrayList<>();
 
     @Builder
     public Store(
@@ -118,5 +123,4 @@ public class Store extends BaseTimeEntity{
         this.backImg = storeUpdateDto.getBackImg();
         this.profileImg = storeUpdateDto.getProfileImg();
     }
-
 }

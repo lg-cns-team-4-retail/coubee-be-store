@@ -1,5 +1,7 @@
 package com.coubee.coubeebestore.domain;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +29,11 @@ public class InterestStore {
     ) {
         this.userId = userId;
         this.storeId = storeId;
+    }
+
+    public boolean isExist(Long userId) {
+        if(userId == this.userId){
+            return true;
+        } else return false;
     }
 }

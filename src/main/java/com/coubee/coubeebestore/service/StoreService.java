@@ -6,6 +6,7 @@ import com.coubee.coubeebestore.domain.*;
 import com.coubee.coubeebestore.domain.dto.*;
 import com.coubee.coubeebestore.domain.mapper.StoreMapper;
 import com.coubee.coubeebestore.domain.repository.CategoryRepository;
+import com.coubee.coubeebestore.domain.repository.HotdealRepository;
 import com.coubee.coubeebestore.domain.repository.InterestStoreRepository;
 import com.coubee.coubeebestore.domain.repository.StoreCategoryRepository;
 import com.coubee.coubeebestore.domain.repository.StoreRepository;
@@ -172,7 +173,19 @@ public class StoreService {
                 .stream()
                 .map(store -> {
                     double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
-                    return StoreMapper.fromEntity(store, distance);
+                    return StoreMapper.fromEntity(store, false, distance);
+                })
+                .toList();
+    }
+
+    // 근처 매장 조회(로그인시)
+    public List<StoreResponseDto> getNearStoreListforUser(Double latitude, Double longitude, Long userId, String keyword) {
+        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
+                .stream()
+                .map(store -> {
+                    double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
+                    boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(userId, store.getStoreId());
+                    return StoreMapper.fromEntity(store, isInterest, distance);
                 })
                 .toList();
     }
@@ -198,9 +211,13 @@ public class StoreService {
         List<InterestStore> interestList = interestStoreRepository.findByUserId(userId);
         List<Long> storeIds = interestList.stream().map(InterestStore::getStoreId).toList();
         List<Store> stores = storeRepository.findAllByStoreIdIn(storeIds);
+
         return stores.stream()
-                .map(StoreMapper::fromEntityForUser)
-                .collect(Collectors.toList());
+                .map(store -> {
+                    StoreResponseDto dto = StoreMapper.fromEntityForUser(store, true);
+                    return dto;
+                })
+                .toList();
     }
 
     // 매장 상세 조회
@@ -213,6 +230,8 @@ public class StoreService {
         } else if (store.getStatus().equals(StoreStatus.REJECTED)) {
             throw new BadParameter("승인 거절된 매장입니다");
         }
-        return StoreMapper.fromEntityForUser(store);
+        
+        boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(store.getOwnerId(), storeId);
+        return StoreMapper.fromEntityForUser(store, isInterest);
     }
 }

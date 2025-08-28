@@ -1,6 +1,5 @@
 package com.coubee.coubeebestore.domain.repository;
 
-import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 

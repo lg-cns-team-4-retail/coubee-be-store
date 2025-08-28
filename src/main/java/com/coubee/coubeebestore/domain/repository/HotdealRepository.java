@@ -10,4 +10,6 @@ import com.coubee.coubeebestore.domain.HotdealStatus;
 public interface HotdealRepository extends JpaRepository<Hotdeal, Long>{
     
     Optional<Hotdeal> findByStore_StoreIdAndHotdealStatus(Long storeId, HotdealStatus hotdealStatus);
+
+    Hotdeal findByStore_StoreId(Long storeId);
 }

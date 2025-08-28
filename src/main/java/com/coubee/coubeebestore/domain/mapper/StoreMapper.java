@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.domain.mapper;
 
+import com.coubee.coubeebestore.domain.HotdealStatus;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreCategory;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
@@ -59,14 +60,21 @@ public class StoreMapper {
                         .map(CategoryMapper::fromEntity)
                         .toList()
         );
+        dto.setHotdeal(
+            store.getHotdeals().stream()
+                .filter(h -> h.getHotdealStatus() == HotdealStatus.ACTIVE)
+                .findFirst()
+                .map(HotdealMapper::fromEntity)
+                .orElse(null)
+        );
         return dto;
     }
-    public static StoreResponseDto fromEntity(Store store, double distance) {
-        StoreResponseDto dto = fromEntityForUser(store);
+    public static StoreResponseDto fromEntity(Store store, boolean isInterest, double distance) {
+        StoreResponseDto dto = fromEntityForUser(store, isInterest);
         dto.setDistance(distance);
         return dto;
     }
-    public static StoreResponseDto fromEntityForUser(Store store) {
+    public static StoreResponseDto fromEntityForUser(Store store, boolean isInterest) {
         StoreResponseDto dto = new StoreResponseDto();
         dto.setStoreId(store.getStoreId());
         dto.setStoreName(store.getStoreName());
@@ -84,6 +92,14 @@ public class StoreMapper {
                         .map(CategoryMapper::fromEntity)
                         .toList()
         );
+        dto.setHotdeal(
+            store.getHotdeals().stream()
+                .filter(h -> h.getHotdealStatus() == HotdealStatus.ACTIVE)
+                .findFirst()
+                .map(HotdealMapper::fromEntity)
+                .orElse(null)
+        );
+        dto.setInterest(isInterest);
         return dto;
     }
 }

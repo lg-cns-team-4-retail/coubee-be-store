@@ -35,6 +35,7 @@ public class StoreDto {
 
     private List<CategoryDto> storeTag;
 
+    private HotdealResponseDto hotdeal;
 
     private double distance;
 
