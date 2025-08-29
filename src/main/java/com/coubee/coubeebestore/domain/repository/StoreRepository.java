@@ -51,7 +51,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
                                                         @Param("status") StoreStatus status);
 
     @Query("""
-    SELECT DISTINCT s 
+    SELECT DISTINCT s
     FROM Store s
     WHERE s.storeId IN :storeIds
     """)                                                    
@@ -77,7 +77,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
         ORDER BY function('ST_DistanceSphere',
             function('ST_MakePoint', :lng, :lat),
             function('ST_MakePoint', s.longitude, s.latitude)
-        ) 
+        )
     """)
     List<Store> findNearbyStoresOrderByDistance(@Param("lat") double lat, @Param("lng") double lng, @Param("maxDistance") double maxDistance);
 }

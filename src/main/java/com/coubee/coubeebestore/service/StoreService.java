@@ -384,19 +384,46 @@ public class StoreService {
     @Transactional(readOnly = true)
     public List<StoreResponseDto> getNearStoreListforUserByInterest(Double latitude, Double longitude) {
         String userIdStr = GatewayRequestHeaderUtils.getUserId();
-        long userId;
-        if(userIdStr!= null){
-            userId = Long.parseLong(userIdStr);
-        } else {
-            userId = -999L;
+        long userId = (userIdStr != null) ? Long.parseLong(userIdStr) : -999L;
+
+        // 1. 근처 매장 조회
+        List<Store> stores = storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500);
+        List<Long> storeIds = stores.stream().map(Store::getStoreId).toList();
+
+        if (storeIds.isEmpty()) {
+            return List.of();
         }
-        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500)
-                .stream()
+
+        // 2. 관심 매장 여부 (한 방)
+        List<Long> interestStoreIds = interestStoreRepository.findStoreIdsByUserIdAndStoreIds(userId, storeIds);
+        Set<Long> interestSet = new HashSet<>(interestStoreIds);
+
+        // 3. 매장별 관심 개수 (한 방)
+        Map<Long, Long> interestCountMap = interestStoreRepository.countInterestsByStoreIds(storeIds).stream()
+                .collect(Collectors.toMap(
+                        row -> (Long) row[0],   // storeId
+                        row -> (Long) row[1]    // count
+                ));
+
+        // 4. 매장별 핫딜 (한 방)
+        List<Hotdeal> hotdeals = hotdealRepository.findByStoreIds(storeIds);
+        Map<Long, HotdealResponseDto> hotdealMap = hotdeals.stream()
+                .collect(Collectors.toMap(
+                        h -> h.getStore().getStoreId(),
+                        HotdealMapper::fromEntity,
+                        (h1, h2) -> h1 // 여러 개면 첫 번째만
+                ));
+
+        // 5. DTO 조립
+        return stores.stream()
                 .map(store -> {
-                    double distance = DistanceCalculator.calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude());
-                    boolean isInterest = interestStoreRepository.existsByUserIdAndStoreId(userId, store.getStoreId());
+                    double distance = DistanceCalculator.calculateDistance(latitude, longitude,
+                            store.getLatitude(), store.getLongitude());
+                    boolean isInterest = interestSet.contains(store.getStoreId());
+
                     StoreResponseDto dto = StoreMapper.fromEntity(store, isInterest, distance);
-                    dto.setInterestCount(interestStoreRepository.findAllByStoreId(store.getStoreId()).size());
+                    dto.setInterestCount(interestCountMap.getOrDefault(store.getStoreId(), 0L));
+                    dto.setHotdeal(hotdealMap.get(store.getStoreId()));
                     return dto;
                 })
                 .sorted((a, b) -> Long.compare(b.getInterestCount(), a.getInterestCount()))

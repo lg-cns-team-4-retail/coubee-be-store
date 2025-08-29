@@ -21,5 +21,6 @@ public interface InterestStoreRepository extends JpaRepository<InterestStore, Lo
     @Query("SELECT i.storeId FROM InterestStore i WHERE i.userId = :userId AND i.storeId IN :storeIds")
     List<Long> findStoreIdsByUserIdAndStoreIds(@Param("userId") Long userId,
                                                @Param("storeIds") List<Long> storeIds);
-
+    @Query("SELECT i.storeId, COUNT(i) FROM InterestStore i WHERE i.storeId IN :storeIds GROUP BY i.storeId")
+    List<Object[]> countInterestsByStoreIds(@Param("storeIds") List<Long> storeIds);
 }
