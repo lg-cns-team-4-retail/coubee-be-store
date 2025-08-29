@@ -15,13 +15,11 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
-    @Query("SELECT s FROM Store s LEFT JOIN FETCH s.storeCategories sc LEFT JOIN FETCH sc.category WHERE s.ownerId = :ownerId")
+    @Query("SELECT s FROM Store s WHERE s.ownerId = :ownerId")
     List<Store> findAllByOwnerId(Long ownerId);
 
     @Query(value = """
     SELECT s.storeId FROM Store s 
-    LEFT JOIN s.storeCategories sc 
-    LEFT JOIN sc.category 
     WHERE s.ownerId = :ownerId 
     AND s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
     """)
@@ -29,8 +27,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query(value = """
         SELECT s FROM Store s
-        LEFT JOIN FETCH s.storeCategories sc
-        LEFT JOIN FETCH sc.category c
         WHERE s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
         AND UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
         AND function('ST_DistanceSphere',
@@ -47,8 +43,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("""
       SELECT DISTINCT s
       FROM Store s
-      LEFT JOIN FETCH s.storeCategories sc
-      LEFT JOIN FETCH sc.category c
       WHERE UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
         AND (:status IS NULL OR s.status = :status)
         ORDER BY s.createdAt desc
@@ -59,8 +53,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("""
     SELECT DISTINCT s 
     FROM Store s
-    LEFT JOIN FETCH s.storeCategories sc
-    LEFT JOIN FETCH sc.category
     WHERE s.storeId IN :storeIds
     """)                                                    
     List<Store> findAllByStoreIdIn(List<Long> storeIds);
@@ -72,13 +64,11 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("SELECT s.status FROM Store s WHERE s.storeId = :storeId")
     StoreStatus findStatusByStoreId(@Param("storeId") Long storeId);
 
-    @Query("SELECT s FROM Store s JOIN FETCH s.storeCategories sc JOIN FETCH sc.category WHERE s.storeId = :id")
+    @Query("SELECT s FROM Store s WHERE s.storeId = :id")
     Optional<Store> findStoreWithCategories(@Param("id") Long id);
 
         @Query(value = """
         SELECT s FROM Store s
-        LEFT JOIN FETCH s.storeCategories sc
-        LEFT JOIN FETCH sc.category c
         WHERE s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
         AND function('ST_DistanceSphere',
             function('ST_MakePoint', :lng, :lat),

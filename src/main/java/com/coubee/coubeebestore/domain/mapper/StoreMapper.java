@@ -54,19 +54,6 @@ public class StoreMapper {
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
         dto.setCreatedAt(store.getCreatedAt());
-        dto.setStoreTag(
-                store.getStoreCategories().stream()
-                        .map(StoreCategory::getCategory)
-                        .map(CategoryMapper::fromEntity)
-                        .toList()
-        );
-        dto.setHotdeal(
-            store.getHotdeals().stream()
-                .filter(h -> h.getHotdealStatus() == HotdealStatus.ACTIVE)
-                .findFirst()
-                .map(HotdealMapper::fromEntity)
-                .orElse(null)
-        );
         return dto;
     }
     public static StoreResponseDto fromEntity(Store store, boolean isInterest, double distance) {
@@ -87,19 +74,6 @@ public class StoreMapper {
         dto.setProfileImg(store.getProfileImg());
         dto.setLongitude(store.getLongitude());
         dto.setLatitude(store.getLatitude());
-        dto.setStoreTag(
-                store.getStoreCategories().stream()
-                        .map(StoreCategory::getCategory)
-                        .map(CategoryMapper::fromEntity)
-                        .toList()
-        );
-        dto.setHotdeal(
-            store.getHotdeals().stream()
-                .filter(h -> h.getHotdealStatus() == HotdealStatus.ACTIVE)
-                .findFirst()
-                .map(HotdealMapper::fromEntity)
-                .orElse(null)
-        );
         dto.setInterest(isInterest);
         return dto;
     }
@@ -116,19 +90,6 @@ public class StoreMapper {
         dto.setProfileImg(store.getProfileImg());
         dto.setLongitude(store.getLongitude());
         dto.setLatitude(store.getLatitude());
-        dto.setStoreTag(
-                store.getStoreCategories().stream()
-                        .map(StoreCategory::getCategory)
-                        .map(CategoryMapper::fromEntity)
-                        .toList()
-        );
-        dto.setHotdeal(
-            store.getHotdeals().stream()
-                .filter(h -> h.getHotdealStatus() == HotdealStatus.ACTIVE)
-                .findFirst()
-                .map(HotdealMapper::fromEntity)
-                .orElse(null)
-        );
         return dto;
     }
 }

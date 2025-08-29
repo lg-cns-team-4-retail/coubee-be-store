@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.domain.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,4 +23,8 @@ public interface HotdealRepository extends JpaRepository<Hotdeal, Long>{
     AND h.hotdealStatus = com.coubee.coubeebestore.domain.HotdealStatus.ACTIVE
     """)
     Optional<Hotdeal> findHotdealByStoreId(@Param("storeId") Long storeId);
+
+
+    @Query("SELECT h FROM Hotdeal h WHERE h.store.storeId IN :storeIds AND h.hotdealStatus = 'ACTIVE'")
+    List<Hotdeal> findByStoreIds(@Param("storeIds") List<Long> storeIds);
 }
