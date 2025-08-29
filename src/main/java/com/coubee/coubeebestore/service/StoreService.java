@@ -18,6 +18,7 @@ import com.coubee.coubeebestore.util.FileUploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -243,6 +244,55 @@ public class StoreService {
                 })
                 .toList();
     }
+    @Transactional(readOnly = true)
+    public Page<StoreResponseDto> getNearStoreList(Double latitude, Double longitude, String keyword, Pageable pageable) {
+        Page<Store> storesPage = storeRepository.findNearbyStoresOrderByDistanceAndKeyword(latitude, longitude, 500, keyword, pageable);
+        List<Store> stores = storesPage.getContent();
+        List<Long> storeIds = stores.stream().map(Store::getStoreId).toList();
+
+        if (storeIds.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        List<StoreCategory> storeCategories = storeCategoryRepository.findByStoreIds(storeIds);
+        List<Hotdeal> hotdeals = hotdealRepository.findByStoreIds(storeIds);
+
+        Map<Long, List<CategoryDto>> categoryMap = storeCategories.stream()
+                .collect(Collectors.groupingBy(sc -> sc.getStore().getStoreId(),
+                        Collectors.mapping(sc -> CategoryMapper.fromEntity(sc.getCategory()), Collectors.toList())));
+
+        Map<Long, HotdealResponseDto> hotdealMap = hotdeals.stream()
+                .collect(Collectors.toMap(h -> h.getStore().getStoreId(),
+                        HotdealMapper::fromEntity,
+                        (h1, h2) -> h1));
+
+        List<StoreResponseDto> dtoList = stores.stream()
+                .map(store -> {
+                    double distance = DistanceCalculator.calculateDistance(latitude, longitude,
+                            store.getLatitude(), store.getLongitude());
+                    StoreResponseDto dto = StoreMapper.fromEntity(store, false, distance);
+                    dto.setStoreTag(categoryMap.getOrDefault(store.getStoreId(), List.of()));
+                    dto.setHotdeal(hotdealMap.get(store.getStoreId()));
+                    return dto;
+                })
+                .toList();
+
+        return new PageImpl<>(dtoList, pageable, storesPage.getTotalElements());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // 근처 매장 조회(로그인시)
     @Transactional(readOnly = true)
@@ -289,6 +339,59 @@ public class StoreService {
                 })
                 .toList();
     }
+    @Transactional(readOnly = true)
+    public Page<StoreResponseDto> getNearStoreListforUser(Double latitude, Double longitude, Long userId, String keyword, Pageable pageable) {
+        // 1. 근처 매장 목록 조회 (Page)
+        Page<Store> storesPage = storeRepository.findNearbyStoresOrderByDistanceAndKeyword(latitude, longitude, 500, keyword, pageable);
+        List<Store> stores = storesPage.getContent();
+        List<Long> storeIds = stores.stream().map(Store::getStoreId).toList();
+
+        if (storeIds.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        // 2. 한 번에 카테고리/핫딜 조회
+        List<StoreCategory> storeCategories = storeCategoryRepository.findByStoreIds(storeIds);
+        List<Hotdeal> hotdeals = hotdealRepository.findByStoreIds(storeIds);
+
+        // 3. 관심 매장 조회
+        List<Long> interestStoreIds = interestStoreRepository.findStoreIdsByUserIdAndStoreIds(userId, storeIds);
+        Set<Long> interestSet = new HashSet<>(interestStoreIds);
+
+        // 4. Map 매핑
+        Map<Long, List<CategoryDto>> categoryMap = storeCategories.stream()
+                .collect(Collectors.groupingBy(sc -> sc.getStore().getStoreId(),
+                        Collectors.mapping(sc -> CategoryMapper.fromEntity(sc.getCategory()), Collectors.toList())));
+
+        Map<Long, HotdealResponseDto> hotdealMap = hotdeals.stream()
+                .collect(Collectors.toMap(h -> h.getStore().getStoreId(),
+                        HotdealMapper::fromEntity,
+                        (h1, h2) -> h1));
+
+        // 5. DTO 변환
+        List<StoreResponseDto> dtoList = stores.stream()
+                .map(store -> {
+                    double distance = DistanceCalculator.calculateDistance(latitude, longitude,
+                            store.getLatitude(), store.getLongitude());
+                    boolean isInterest = interestSet.contains(store.getStoreId());
+                    StoreResponseDto dto = StoreMapper.fromEntity(store, isInterest, distance);
+                    dto.setStoreTag(categoryMap.getOrDefault(store.getStoreId(), List.of()));
+                    dto.setHotdeal(hotdealMap.get(store.getStoreId()));
+                    return dto;
+                })
+                .toList();
+
+        return new PageImpl<>(dtoList, pageable, storesPage.getTotalElements());
+    }
+
+
+
+
+
+
+
+
+
 
     // 관심 매장 등록
     @Transactional

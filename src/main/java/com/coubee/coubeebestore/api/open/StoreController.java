@@ -6,6 +6,9 @@ import com.coubee.coubeebestore.domain.dto.StoreResponseDto;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +24,25 @@ public class StoreController {
     private final StoreService storeService;
 
     // 매장 목록 조회(위치기반)
+//    @GetMapping("/near")
+//    public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "") String keyword) {
+//        if(GatewayRequestHeaderUtils.getUserId() != null) {
+//            Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+//            List<StoreResponseDto> storeList = storeService.getNearStoreListforUser(lat, lng, userId, keyword);
+//            return ApiResponseDto.readOk(storeList);
+//        } else {
+//            List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
+//            return ApiResponseDto.readOk(storeList);
+//        }
+//    }
     @GetMapping("/near")
-    public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "") String keyword) {
+    public ApiResponseDto<Page<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "") String keyword, @PageableDefault(page=0,size = 10) Pageable pageable) {
         if(GatewayRequestHeaderUtils.getUserId() != null) {
             Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
-            List<StoreResponseDto> storeList = storeService.getNearStoreListforUser(lat, lng, userId, keyword);
+            Page<StoreResponseDto> storeList = storeService.getNearStoreListforUser(lat, lng, userId, keyword,pageable);
             return ApiResponseDto.readOk(storeList);
         } else {
-            List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
+            Page<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword,pageable);
             return ApiResponseDto.readOk(storeList);
         }
     }
