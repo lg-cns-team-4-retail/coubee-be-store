@@ -40,6 +40,37 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     """)
     List<Store> findNearbyStoresOrderByDistanceAndKeyword(@Param("lat") double lat, @Param("lng") double lng, @Param("maxDistance") double maxDistance, @Param("keyword") String keyword);
 
+    @Query(
+            value = """
+        SELECT s FROM Store s
+        WHERE s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
+          AND UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
+          AND function('ST_DistanceSphere',
+              function('ST_MakePoint', :lng, :lat),
+              function('ST_MakePoint', s.longitude, s.latitude)
+          ) <= :maxDistance
+        ORDER BY function('ST_DistanceSphere',
+              function('ST_MakePoint', :lng, :lat),
+              function('ST_MakePoint', s.longitude, s.latitude)
+          )
+    """,
+            countQuery = """
+        SELECT COUNT(s) FROM Store s
+        WHERE s.status = com.coubee.coubeebestore.domain.StoreStatus.APPROVED
+          AND UPPER(s.storeName) LIKE UPPER(CONCAT('%', :keyword, '%'))
+          AND function('ST_DistanceSphere',
+              function('ST_MakePoint', :lng, :lat),
+              function('ST_MakePoint', s.longitude, s.latitude)
+          ) <= :maxDistance
+    """
+    )
+    Page<Store> findNearbyStoresOrderByDistanceAndKeyword(
+            @Param("lat") double lat,
+            @Param("lng") double lng,
+            @Param("maxDistance") double maxDistance,
+            @Param("keyword") String keyword,
+            Pageable pageable
+    );
     @Query("""
       SELECT DISTINCT s
       FROM Store s
