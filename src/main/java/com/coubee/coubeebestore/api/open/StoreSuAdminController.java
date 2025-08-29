@@ -7,10 +7,6 @@ import com.coubee.coubeebestore.domain.dto.StoreRejectDto;
 import com.coubee.coubeebestore.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -46,14 +42,16 @@ public class StoreSuAdminController {
         List<StoreDto> list = storeService.getStatusList(StoreStatus.PENDING);
         return ApiResponseDto.readOk(list);
     }
-    // 매장 전체 조회(페이징처리)
+
+    // 매장 전체 조회
     @GetMapping("/list")
     public ApiResponseDto<List<StoreDto>> getStoreList(@RequestParam(defaultValue = "") String keyword,
                                                        @RequestParam(required = false) String status) {
         StoreStatus parsed = (StringUtils.hasText(status) ? StoreStatus.valueOf(status.toUpperCase()) : null);
-        List<StoreDto> list = storeService.getStoreList(keyword,parsed);
+        List<StoreDto> list = storeService.getStoreList(keyword, parsed);
         return ApiResponseDto.readOk(list);
     }
+
     // 매장 삭제
     @DeleteMapping("/delete/{storeId}")
     public void storeDelete(@PathVariable Long storeId) {

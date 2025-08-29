@@ -71,10 +71,6 @@ public class Store extends BaseTimeEntity{
     @Setter
     private String rejectReason;
 
-    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StoreCategory> storeCategories = new ArrayList<>();
-
-
     @Builder
     public Store(
             Long ownerId,
@@ -118,5 +114,4 @@ public class Store extends BaseTimeEntity{
         this.backImg = storeUpdateDto.getBackImg();
         this.profileImg = storeUpdateDto.getProfileImg();
     }
-
 }

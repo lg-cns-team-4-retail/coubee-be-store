@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Slf4j
 @RestController
@@ -26,8 +23,14 @@ public class StoreController {
     // 매장 목록 조회(위치기반)
     @GetMapping("/near")
     public ApiResponseDto<List<StoreResponseDto>> getNearStoreList(@RequestParam double lat, @RequestParam double lng, @RequestParam(required = false, defaultValue = "") String keyword) {
-        List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
-        return ApiResponseDto.readOk(storeList);
+        if(GatewayRequestHeaderUtils.getUserId() != null) {
+            Long userId = GatewayRequestHeaderUtils.getUserIdOrThrowException();
+            List<StoreResponseDto> storeList = storeService.getNearStoreListforUser(lat, lng, userId, keyword);
+            return ApiResponseDto.readOk(storeList);
+        } else {
+            List<StoreResponseDto> storeList = storeService.getNearStoreList(lat, lng, keyword);
+            return ApiResponseDto.readOk(storeList);
+        }
     }
 
     // 관심 매장 등록
@@ -51,6 +54,13 @@ public class StoreController {
     public ApiResponseDto<?> getStoreById(@PathVariable Long storeId) {
         StoreResponseDto store = storeService.getStoreById(storeId);
         return ApiResponseDto.readOk(store);
+    }
+
+    // 추천 매장 목록(위치기반)
+    @GetMapping("/near/interest")
+    public ApiResponseDto<List<StoreResponseDto>> getNearStoreListByInterest(@RequestParam double lat, @RequestParam double lng) {
+            List<StoreResponseDto> storeList = storeService.getNearStoreListforUserByInterest(lat, lng);
+            return ApiResponseDto.readOk(storeList);
     }
     
 }

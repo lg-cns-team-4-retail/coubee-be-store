@@ -1,5 +1,6 @@
 package com.coubee.coubeebestore.domain.mapper;
 
+import com.coubee.coubeebestore.domain.HotdealStatus;
 import com.coubee.coubeebestore.domain.Store;
 import com.coubee.coubeebestore.domain.StoreCategory;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
@@ -53,19 +54,30 @@ public class StoreMapper {
         dto.setApprovedAt(store.getApprovedAt());
         dto.setRejectReason(store.getRejectReason());
         dto.setCreatedAt(store.getCreatedAt());
-        dto.setStoreTag(
-                store.getStoreCategories().stream()
-                        .map(StoreCategory::getCategory)
-                        .map(CategoryMapper::fromEntity)
-                        .toList()
-        );
         return dto;
     }
-    public static StoreResponseDto fromEntity(Store store, double distance) {
-        StoreResponseDto dto = fromEntityForUser(store);
+    public static StoreResponseDto fromEntity(Store store, boolean isInterest, double distance) {
+        StoreResponseDto dto = fromEntityForUser(store, isInterest);
         dto.setDistance(distance);
         return dto;
     }
+
+    public static StoreResponseDto fromEntityForUser(Store store, boolean isInterest) {
+        StoreResponseDto dto = new StoreResponseDto();
+        dto.setStoreId(store.getStoreId());
+        dto.setStoreName(store.getStoreName());
+        dto.setDescription(store.getDescription());
+        dto.setContactNo(store.getContactNo());
+        dto.setStoreAddress(store.getStoreAddress());
+        dto.setWorkingHour(store.getWorkingHour());
+        dto.setBackImg(store.getBackImg());
+        dto.setProfileImg(store.getProfileImg());
+        dto.setLongitude(store.getLongitude());
+        dto.setLatitude(store.getLatitude());
+        dto.setInterest(isInterest);
+        return dto;
+    }
+
     public static StoreResponseDto fromEntityForUser(Store store) {
         StoreResponseDto dto = new StoreResponseDto();
         dto.setStoreId(store.getStoreId());
@@ -78,12 +90,6 @@ public class StoreMapper {
         dto.setProfileImg(store.getProfileImg());
         dto.setLongitude(store.getLongitude());
         dto.setLatitude(store.getLatitude());
-        dto.setStoreTag(
-                store.getStoreCategories().stream()
-                        .map(StoreCategory::getCategory)
-                        .map(CategoryMapper::fromEntity)
-                        .toList()
-        );
         return dto;
     }
 }
