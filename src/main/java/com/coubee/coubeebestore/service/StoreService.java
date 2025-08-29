@@ -214,8 +214,9 @@ public class StoreService {
 
         return stores.stream()
                 .map(store -> {
-                    StoreResponseDto dto = StoreMapper.fromEntityForUser(store,
-                    interestStoreRepository.existsByUserIdAndStoreId(userId, store.getStoreId()));
+                    StoreResponseDto dto = StoreMapper.fromEntityForUser(store,true
+                    // interestStoreRepository.existsByUserIdAndStoreId(userId, store.getStoreId())
+                    );
                     return dto;
                 })
                 .toList();

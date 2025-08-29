@@ -1,7 +1,5 @@
 package com.coubee.coubeebestore.domain;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,9 +15,11 @@ public class InterestStore {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Getter
+    @Column(name = "store_id", nullable = false)
     private Long storeId;
 
     @Builder

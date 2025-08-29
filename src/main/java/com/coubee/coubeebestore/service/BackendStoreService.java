@@ -27,7 +27,7 @@ public class BackendStoreService {
     private final HotdealRepository hotdealRepository;
 
     public List<Long> getNearStoreIds(double latitude, double longitude, String keyword) {
-        return storeRepository.findNearbyStoresOrderByDistance(latitude, longitude, 500, keyword)
+        return storeRepository.findNearbyStoresOrderByDistanceAndKeyword(latitude, longitude, 500, keyword)
                 .stream()
                 .map(Store::getStoreId)
                 .toList();
