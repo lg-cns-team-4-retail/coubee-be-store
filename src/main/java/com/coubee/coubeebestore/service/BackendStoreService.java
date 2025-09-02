@@ -66,5 +66,13 @@ public class BackendStoreService {
                     .map(HotdealMapper::fromEntity)
                     .orElse(null);
     }
+
+    public Long getOwnerIdByStoreId(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElse(null);
+        if (store == null) {
+            return null;
+        }
+        return store.getOwnerId();
+    }
 }
 

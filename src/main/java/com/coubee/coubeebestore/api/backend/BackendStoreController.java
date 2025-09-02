@@ -63,4 +63,8 @@ public class BackendStoreController {
     public ApiResponseDto<HotdealResponseDto> getHotdeal(@PathVariable Long storeId) {
         return ApiResponseDto.readOk(backendStoreService.getHotdeal(storeId));
     }
+    @GetMapping(value="/owner/{storeId}")
+    public ApiResponseDto<Long> getOwnerIdByStoreId(@PathVariable Long storeId) {
+        return ApiResponseDto.readOk(backendStoreService.getOwnerIdByStoreId(storeId));
+    }
 }
