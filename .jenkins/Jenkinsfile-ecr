@@ -7,7 +7,7 @@ def PROD_BUILD = false
 pipeline {
     agent {
         node {
-            label 'master'
+            label 'linux-docker-agent'
         }
     }
 
@@ -90,36 +90,10 @@ pipeline {
             }
         }
 
-        stage('Setup Docker Buildx') {
-            steps {
-                sh '''
-                # Buildx 빌더 생성 및 사용 (이미 있으면 무시)
-                docker buildx create --name jenkins-multiplatform --use || echo "Builder already exists"
-                docker buildx inspect jenkins-multiplatform --bootstrap
-                '''
-            }
-        }
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    def ECR_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}:${APP_VERSION}"
-
-                    // ECR에 직접 빌드 및 푸시 (Linux 플랫폼 강제)
-                    withAWS(region: AWS_REGION, credentials: AWS_CREDENTIAL_ID) {
-                        sh """
-                          echo "[INFO] Logging in to ECR..."
-                          aws ecr get-login-password --region ${AWS_REGION} \\
-                            | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-
-                          echo "[INFO] Building and pushing Docker image for Linux platform..."
-                          docker buildx build \\
-                            --platform linux/amd64 \\
-                            -t ${ECR_IMAGE} \\
-                            -f .docker/Dockerfile \\
-                            --push .
-                        """
-                    }
+                    docker.build("${DOCKER_IMAGE_NAME}", "--platform=linux/amd64 -f .docker/Dockerfile .")
                 }
             }
         }
@@ -149,15 +123,6 @@ pipeline {
 
                     sh "docker rmi ${DOCKER_IMAGE_NAME}"
                 }
-            }
-        }
-    }
-
-    post {
-        always {
-            script {
-                // Buildx 빌더 정리 (선택사항)
-                sh 'docker buildx rm jenkins-multiplatform || echo "Builder cleanup skipped"'
             }
         }
     }
