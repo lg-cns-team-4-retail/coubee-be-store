@@ -103,14 +103,24 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // 기존 docker.build 대신 buildx 사용
-                    sh """
-                    docker buildx build \\
-                      --platform linux/amd64 \\
-                      -t ${DOCKER_IMAGE_NAME} \\
-                      -f .docker/Dockerfile \\
-                      --load .
-                    """
+                    def ECR_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}:${APP_VERSION}"
+
+                    // ECR에 직접 빌드 및 푸시 (Linux 플랫폼 강제)
+                    withAWS(region: AWS_REGION, credentials: AWS_CREDENTIAL_ID) {
+                        sh """
+                          echo "[INFO] Logging in to ECR..."
+                          aws ecr get-login-password --region ${AWS_REGION} \\
+                            | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
+
+                          echo "[INFO] Building and pushing Docker image for Linux platform..."
+                          docker buildx build \\
+                            --platform linux/amd64 \\
+                            -t ${DOCKER_IMAGE_NAME} \\
+                            -t ${ECR_IMAGE} \\
+                            -f .docker/Dockerfile \\
+                            --push .
+                        """
+                    }
                 }
             }
         }
@@ -118,27 +128,8 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // ECR Push
-                    def ECR_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}:${APP_VERSION}"
-
-                    withAWS(region: AWS_REGION, credentials: AWS_CREDENTIAL_ID) {
-                        sh """
-                          echo "[INFO] Logging in to ECR..."
-                          aws ecr get-login-password --region ${AWS_REGION} \\
-                            | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
-
-                          echo "[INFO] Tagging Docker image for ECR..."
-                          docker tag ${DOCKER_IMAGE_NAME} ${ECR_IMAGE}
-
-                          echo "[INFO] Pushing Docker image to ECR..."
-                          docker push ${ECR_IMAGE}
-
-                          echo "[INFO] Cleaning up local ECR image..."
-                          docker rmi ${ECR_IMAGE}
-                        """
-                    }
-
-                    sh "docker rmi ${DOCKER_IMAGE_NAME}"
+                    // 이미 이전 스테이지에서 ECR에 푸시됨
+                    echo "[INFO] Docker image already pushed to ECR in previous stage"
                 }
             }
         }
