@@ -90,10 +90,27 @@ pipeline {
             }
         }
 
+        stage('Setup Docker Buildx') {
+            steps {
+                sh '''
+                # Buildx 빌더 생성 및 사용 (이미 있으면 무시)
+                docker buildx create --name jenkins-multiplatform --use || echo "Builder already exists"
+                docker buildx inspect jenkins-multiplatform --bootstrap
+                '''
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKER_IMAGE_NAME}", "--platform=linux/amd64 -f .docker/Dockerfile .")
+                    // 기존 docker.build 대신 buildx 사용
+                    sh """
+                    docker buildx build \\
+                      --platform linux/amd64 \\
+                      -t ${DOCKER_IMAGE_NAME} \\
+                      -f .docker/Dockerfile \\
+                      --load .
+                    """
                 }
             }
         }
@@ -123,6 +140,15 @@ pipeline {
 
                     sh "docker rmi ${DOCKER_IMAGE_NAME}"
                 }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // Buildx 빌더 정리 (선택사항)
+                sh 'docker buildx rm jenkins-multiplatform || echo "Builder cleanup skipped"'
             }
         }
     }
