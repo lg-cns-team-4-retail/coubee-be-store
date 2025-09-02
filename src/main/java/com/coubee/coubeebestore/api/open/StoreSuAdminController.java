@@ -5,6 +5,8 @@ import com.coubee.coubeebestore.domain.StoreStatus;
 import com.coubee.coubeebestore.domain.dto.StoreDto;
 import com.coubee.coubeebestore.domain.dto.StoreRejectDto;
 import com.coubee.coubeebestore.service.StoreService;
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -18,6 +20,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/store/su", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Timed
+@Counted
 public class StoreSuAdminController {
 
     private final StoreService storeService;

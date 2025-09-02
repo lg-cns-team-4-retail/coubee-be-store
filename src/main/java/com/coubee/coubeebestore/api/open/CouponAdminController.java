@@ -1,5 +1,7 @@
 package com.coubee.coubeebestore.api.open;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.web.bind.annotation.*;
 
 import com.coubee.coubeebestore.common.dto.ApiResponseDto;
@@ -19,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/api/store/admin/coupon", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Timed
+@Counted
 public class CouponAdminController {
 
     private final CouponService couponService;

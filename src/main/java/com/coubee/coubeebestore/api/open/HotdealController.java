@@ -1,5 +1,7 @@
 package com.coubee.coubeebestore.api.open;
 
+import io.micrometer.core.annotation.Counted;
+import io.micrometer.core.annotation.Timed;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 @RequestMapping(value = "/api/store/admin/hotdeal", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+@Timed
+@Counted
 public class HotdealController {
 
     private final HotdealService hotdealService;
