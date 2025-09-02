@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 def APP_NAME
 def APP_VERSION
-def DOCKER_IMAGE_NAME
 def PROD_BUILD = false
 
 pipeline {
@@ -30,14 +29,11 @@ pipeline {
     environment {
         GIT_URL = "https://github.com/lg-cns-team-4-retail/coubee-be-store.git"
         GITHUB_CREDENTIAL = "github-token"
-        ARTIFACTS = "build/libs/**"
-        DOCKER_REGISTRY = "moonjiuk"
 
-        // ECR 관련 환경 변수
-        AWS_REGION = "ap-northeast-2"
-        AWS_ACCOUNT_ID = "310095858382"
-        AWS_CREDENTIAL_ID = "aws-token"
-        ECR_REPO_NAME = "310095858382.dkr.ecr.ap-northeast-2.amazonaws.com/coubee-be-store"
+        AWS_REGION       = "ap-northeast-2"
+        AWS_ACCOUNT_ID   = "310095858382"
+        AWS_CREDENTIAL_ID= "aws-token"
+        ECR_REPO_NAME    = "310095858382.dkr.ecr.ap-northeast-2.amazonaws.com/coubee-be-store"
     }
 
     options {
@@ -49,7 +45,6 @@ pipeline {
     tools {
         gradle 'Gradle 8.14.2'
         jdk 'OpenJDK 17'
-        dockerTool 'Docker'
     }
 
     stages {
@@ -65,13 +60,6 @@ pipeline {
                             returnStdout: true
                     ).trim()
 
-                    DOCKER_IMAGE_NAME = "${DOCKER_REGISTRY}/${APP_NAME}:${APP_VERSION}"
-
-                    sh "echo IMAGE_NAME is ${APP_NAME}"
-                    sh "echo IMAGE_VERSION is ${APP_VERSION}"
-                    sh "echo DOCKER_IMAGE_NAME is ${DOCKER_IMAGE_NAME}"
-
-                    sh "echo TAG is ${params.TAG}"
                     if( params.TAG.startsWith('origin') == false && params.TAG.endsWith('/main') == false ) {
                         if( params.RELEASE == true ) {
                             APP_VERSION += '-RELEASE'
@@ -80,55 +68,38 @@ pipeline {
                             APP_VERSION += '-TAG'
                         }
                     }
+
+                    sh "echo APP_NAME=${APP_NAME}"
+                    sh "echo APP_VERSION=${APP_VERSION}"
+                    sh "echo TAG=${params.TAG}"
                 }
             }
         }
 
-        stage('Build & Test Application') {
-            steps {
-                sh "gradle clean build"
-            }
-        }
 
-        stage('Build Docker Image') {
+        stage('Build & Push Docker Image (ECR)') {
             steps {
                 script {
-                    dir('.docker') {
-                        sh """
-                          docker build \\
-                            --platform linux/amd64 \\
-                            -t ${DOCKER_IMAGE_NAME} \\
-                            -f Dockerfile ..
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    // ECR Push
-                    def ECR_IMAGE = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}:${APP_VERSION}"
+                    def ECR_IMAGE = "${ECR_REPO_NAME}:${APP_VERSION}"
 
                     withAWS(region: AWS_REGION, credentials: AWS_CREDENTIAL_ID) {
                         sh """
-                          echo "[INFO] Logging in to ECR..."
+                          echo "[INFO] Login to ECR..."
                           aws ecr get-login-password --region ${AWS_REGION} \\
                             | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
-                          echo "[INFO] Tagging Docker image for ECR..."
-                          docker tag ${DOCKER_IMAGE_NAME} ${ECR_IMAGE}
+                          echo "[INFO] Prepare buildx builder..."
+                          docker buildx create --use --name mybuilder || true
+                          docker buildx inspect --bootstrap
 
-                          echo "[INFO] Pushing Docker image to ECR..."
-                          docker push ${ECR_IMAGE}
-
-                          echo "[INFO] Cleaning up local ECR image..."
-                          docker rmi ${ECR_IMAGE}
+                          echo "[INFO] Build & Push amd64 image..."
+                          docker buildx build \\
+                            --platform linux/amd64 \\
+                            -t ${ECR_IMAGE} \\
+                            -f .docker/Dockerfile . \\
+                            --push
                         """
                     }
-
-                    sh "docker rmi ${DOCKER_IMAGE_NAME}"
                 }
             }
         }
