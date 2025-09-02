@@ -115,7 +115,6 @@ pipeline {
                           echo "[INFO] Building and pushing Docker image for Linux platform..."
                           docker buildx build \\
                             --platform linux/amd64 \\
-                            -t ${DOCKER_IMAGE_NAME} \\
                             -t ${ECR_IMAGE} \\
                             -f .docker/Dockerfile \\
                             --push .
