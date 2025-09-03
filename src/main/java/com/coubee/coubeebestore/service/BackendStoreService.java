@@ -68,7 +68,7 @@ public class BackendStoreService {
     }
 
     public Long getOwnerIdByStoreId(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElse(null);
+        Store store = storeRepository.findStoreWithCategories(storeId).orElse(null);
         if (store == null) {
             return null;
         }
