@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: coubee-be-store-deployment
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       app: coubee-be-store
