@@ -47,6 +47,7 @@ public class StoreAdminController {
     // 매장 백그라운드 이미지
     @PostMapping("/img/background")
     public ApiResponseDto<String> storeImgBackground(@RequestParam MultipartFile file) {
+        log.info("/img/background");
         String imgUrl = storeService.storeImgBackground(file);
         return ApiResponseDto.createOk(imgUrl);
     }
@@ -54,6 +55,7 @@ public class StoreAdminController {
     // 매장 프로필 이미지
     @PostMapping("/img/profile")
     public ApiResponseDto<String> storeImgProfile(@RequestParam MultipartFile file) {
+        log.info("/img/profile");
         String imgUrl = storeService.storeImgProfile(file);
         return ApiResponseDto.createOk(imgUrl);
     }
@@ -61,6 +63,7 @@ public class StoreAdminController {
     // 사업자등록증
     @PostMapping("/img/certificate")
     public ApiResponseDto<String> storeImgCertificate(@RequestParam MultipartFile file) {
+        log.info("/img/certificate");
         String imgUrl = storeService.storeImgCertificate(file);
         return ApiResponseDto.createOk(imgUrl);
     }
