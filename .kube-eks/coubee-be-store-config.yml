@@ -20,7 +20,7 @@ data:
         hibernate:
           ddl-auto: update # 개발 환경용
         generate-ddl: true
-        show-sql: true
+        show-sql: false
         open-in-view: false
         properties:
           hibernate.default_schema: coubee_store
