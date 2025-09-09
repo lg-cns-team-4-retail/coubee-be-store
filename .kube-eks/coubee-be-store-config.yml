@@ -28,8 +28,8 @@ data:
         bootstrap-servers: coubee-external-kafka-service:9092
       servlet:
         multipart:
-          max-file-size: 10MB
-          max-request-size: 10MB
+          max-file-size: 100MB
+          max-request-size: 100MB
     file:
       upload:
         base-dir: ${user.home}/Desktop/coubee-img
