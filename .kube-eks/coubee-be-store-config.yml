@@ -35,7 +35,6 @@ data:
         base-dir: ${user.home}/Desktop/coubee-img
         resource-url: /images/**
     cloud:
-      
       aws:
         enabled: true
         region:

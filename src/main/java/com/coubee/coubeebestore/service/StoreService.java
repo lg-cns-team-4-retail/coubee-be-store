@@ -149,7 +149,15 @@ public class StoreService {
         categoryRegister(store, tagNames);
         storeRepository.flush();
         Store savedStore = storeRepository.findStoreWithCategories(storeUpdateDto.getStoreId()).orElseThrow(() -> new NotFound("해당 매장을 찾을 수 없습니다."));
-        return StoreMapper.fromEntity(savedStore);
+        List<CategoryDto> categories = storeCategoryRepository.findByStoreId(storeUpdateDto.getStoreId()).stream()
+                .map(sc -> CategoryMapper.fromEntity(sc.getCategory()))
+                .toList();
+        Optional<Hotdeal> hotdeal = hotdealRepository.findHotdealByStoreId(storeUpdateDto.getStoreId());
+        HotdealResponseDto hotdealDto = hotdeal.isPresent() ? HotdealMapper.fromEntity(hotdeal.get()) : null;
+        StoreDto dto = StoreMapper.fromEntity(savedStore);
+        dto.setStoreTag(categories);
+        dto.setHotdeal(hotdealDto);
+        return dto;
     }
 
     /// 매장 등록시에 필요한 이미지 저장 1.백그라운드이미지 2.매장프로필이미지 3.사업자등록증이미지
